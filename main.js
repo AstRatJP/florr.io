@@ -1,7 +1,8 @@
-let text1 = "1";
-let text2 = "2";
-let text3 = "3";
-let text4 = "4";
+let text1 = "";
+let text2 = "1, 2キーでモード切り替え";
+let text3 = "";
+let text4 = "初期状態に戻すなら再読み込みして下さい...";
+let mode = 1;// 衝突がしっかりしてるモード
 
 class Game {
     constructor() {
@@ -34,7 +35,7 @@ class Game {
         this.enemyRadius = 30;
         this.enemyDamage = 6;
         this.playerMaxHP = 150;
-        this.enemyMaxHP = 600;
+        this.enemyMaxHP = 1000;
         this.playerHP = this.playerMaxHP;
         this.enemyHP = this.enemyMaxHP;
         this.playerDamage = 4;
@@ -88,7 +89,7 @@ class Game {
     }
 
     update() {
-        
+
         // Update player position based on key inputs
         if (this.keys['a']) {
             this.groundSpeedX += 0.05;
@@ -108,28 +109,43 @@ class Game {
         }
 
 
-        
+
 
         this.angle = Math.atan2(this.vY, this.vX);
 
-        // this.groundX += this.groundSpeedX;
-        // this.groundY += this.groundSpeedY;
+        if (this.keys['1']) {
+            mode = 1;
+        }
+        if (this.keys['2']) {
+            mode = 2;
+        }
 
-        this.groundX += this.groundSpeedX*(Math.abs(Math.cos(this.angle)));
-        this.groundY += this.groundSpeedY*(Math.abs(Math.sin(this.angle)));
+        if (mode == 1) {
+            this.groundX += this.groundSpeedX;
+            this.groundY += this.groundSpeedY;
+            if (this.groundX > 500 - 15) this.groundX -= this.groundSpeedX;
+            if (this.groundX < -500 + 15) this.groundX -= this.groundSpeedX;
+            if (this.groundY > 500 - 15) this.groundY -= this.groundSpeedY;
+            if (this.groundY < -500 + 15) this.groundY -= this.groundSpeedY;
 
-        text1 = this.groundSpeedX;
-        text2 = this.groundSpeedX*Math.abs(Math.cos(this.angle));
+            text3 = "現在のモード:1 衝突はしっかりしているが、斜め移動が速い(√2倍)"
+        } else {
+            this.groundX += this.groundSpeedX * (Math.abs(Math.cos(this.angle)));// 斜め移動のとき速さが√2倍になってしまうのを調整
+            this.groundY += this.groundSpeedY * (Math.abs(Math.sin(this.angle)));
+            if (this.groundX > 500 - 15) this.groundX -= this.groundSpeedX * Math.abs(Math.cos(this.angle));
+            if (this.groundX < -500 + 15) this.groundX -= this.groundSpeedX * Math.abs(Math.cos(this.angle));
+            if (this.groundY > 500 - 15) this.groundY -= this.groundSpeedY * Math.abs(Math.sin(this.angle));
+            if (this.groundY < -500 + 15) this.groundY -= this.groundSpeedY * Math.abs(Math.sin(this.angle));
+
+            text3 = "現在のモード:2 斜め移動しても速度が一定だが、衝突した時おかしい";
+        }
 
 
+        // text1 = this.groundSpeedX;
+        // text2 = this.groundSpeedX*Math.abs(Math.cos(this.angle));
 
-        
+
         // 摩擦
-        if (this.groundX > 500 - 15) this.groundX -= this.groundSpeedX*Math.abs(Math.cos(this.angle));
-        if (this.groundX < -500 + 15) this.groundX -= this.groundSpeedX*Math.abs(Math.cos(this.angle));
-        if (this.groundY > 500 - 15) this.groundY -= this.groundSpeedY*Math.abs(Math.sin(this.angle));
-        if (this.groundY < -500 + 15) this.groundY -= this.groundSpeedY*Math.abs(Math.sin(this.angle));
-
         this.groundSpeedX *= 0.955;
         this.groundSpeedY *= 0.955;
         this.vX *= 0.955;
@@ -183,16 +199,16 @@ class Game {
         // 黒目
         this.context.fillStyle = '#222222';
         this.context.beginPath();
-        this.context.ellipse(this.centerX-this.circleRadius*0.25, this.centerY-this.circleRadius*0.17, this.circleRadius*0.12, this.circleRadius*0.23, 0, 0, Math.PI*2);
-        this.context.ellipse(this.centerX+this.circleRadius*0.25, this.centerY-this.circleRadius*0.17, this.circleRadius*0.12, this.circleRadius*0.23, 0, 0, Math.PI*2);
+        this.context.ellipse(this.centerX - this.circleRadius * 0.25, this.centerY - this.circleRadius * 0.17, this.circleRadius * 0.12, this.circleRadius * 0.23, 0, 0, Math.PI * 2);
+        this.context.ellipse(this.centerX + this.circleRadius * 0.25, this.centerY - this.circleRadius * 0.17, this.circleRadius * 0.12, this.circleRadius * 0.23, 0, 0, Math.PI * 2);
         this.context.closePath();
         this.context.fill();
 
         // 白目
         this.context.fillStyle = '#EFEFEF';
         this.context.beginPath();
-        this.context.arc(this.centerX-this.circleRadius*0.25 - Math.cos(this.angle), this.centerY-this.circleRadius*0.17 - Math.sin(this.angle), this.circleRadius*0.09, 0, Math.PI*2);
-        this.context.arc(this.centerX+this.circleRadius*0.25 - Math.cos(this.angle), this.centerY-this.circleRadius*0.17 - Math.sin(this.angle), this.circleRadius*0.09, 0, Math.PI*2);
+        this.context.arc(this.centerX - this.circleRadius * 0.25 - Math.cos(this.angle), this.centerY - this.circleRadius * 0.17 - Math.sin(this.angle), this.circleRadius * 0.09, 0, Math.PI * 2);
+        this.context.arc(this.centerX + this.circleRadius * 0.25 - Math.cos(this.angle), this.centerY - this.circleRadius * 0.17 - Math.sin(this.angle), this.circleRadius * 0.09, 0, Math.PI * 2);
         this.context.closePath();
         this.context.fill();
 
@@ -203,19 +219,19 @@ class Game {
         this.context.beginPath();
         if (this.isRightClick) {
             if (this.isLeftClick) {
-                this.context.ellipse(this.centerX, this.centerY+this.circleRadius*0.58, this.circleRadius*0.3, this.circleRadius*0.28, Math.PI, Math.PI*0.2, Math.PI*0.8);
+                this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.58, this.circleRadius * 0.3, this.circleRadius * 0.28, Math.PI, Math.PI * 0.2, Math.PI * 0.8);
             } else {
-                this.context.ellipse(this.centerX, this.centerY+this.circleRadius*0.46, this.circleRadius*0.3, this.circleRadius*0.08, Math.PI, Math.PI*0.2, Math.PI*0.8);
+                this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.46, this.circleRadius * 0.3, this.circleRadius * 0.08, Math.PI, Math.PI * 0.2, Math.PI * 0.8);
             }
         } else {
             if (this.isLeftClick) {
-                this.context.ellipse(this.centerX, this.centerY+this.circleRadius*0.58, this.circleRadius*0.3, this.circleRadius*0.28, Math.PI, Math.PI*0.2, Math.PI*0.8);
+                this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.58, this.circleRadius * 0.3, this.circleRadius * 0.28, Math.PI, Math.PI * 0.2, Math.PI * 0.8);
             } else {
-                this.context.ellipse(this.centerX, this.centerY+this.circleRadius*0.21, this.circleRadius*0.3, this.circleRadius*0.25, 0, Math.PI*0.2, Math.PI*0.8);
+                this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.21, this.circleRadius * 0.3, this.circleRadius * 0.25, 0, Math.PI * 0.2, Math.PI * 0.8);
             }
         }
         this.context.stroke();
-        
+
         //hpバー
         this.context.strokeStyle = '#222222';
         this.context.lineWidth = 5.5;
@@ -235,8 +251,8 @@ class Game {
 
         if (this.isPlayerDamaged) {
             this.playerHP -= this.enemyDamage;
-            this.groundSpeedX -= (1 * (this.dx / this.distance)) * Math.abs(Math.cos(this.angle));
-            this.groundSpeedY -= (1 * (this.dy / this.distance)) * Math.abs(Math.sin(this.angle));
+            this.groundSpeedX -= (1 * (this.dx / this.distance));
+            this.groundSpeedY -= (1 * (this.dy / this.distance));
             this.context.fillStyle = "rgba(255, 255, 255, 0.6)";
             this.context.beginPath();
             this.context.arc(this.centerX, this.centerY, this.circleRadius, 0, Math.PI * 2);
@@ -278,73 +294,77 @@ class Game {
         //     this.context.fill();
         // }
 
-
-        // 敵を描画
-        this.context.fillStyle = '#FF0000';
-        this.context.beginPath();
-        this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius, 0, Math.PI * 2);
-        this.context.closePath();
-        this.context.fill();
-        
-        this.context.fillStyle = '#FF6347';
-        this.context.beginPath();
-        this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - this.border, 0, Math.PI * 2);
-        this.context.closePath();
-        this.context.fill();
-
-        this.context.fillStyle = '#222222';
-        this.context.font = '20px Roboto medium';
-        this.context.textAlign = "center";
-        this.context.textBaseline = 'middle';
-        this.context.fillText('敵', this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
-
-        this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 5.5;
-        this.context.lineCap = "round";
-        this.context.beginPath();
-        this.context.moveTo(this.centerX + this.groundX + this.enemyX - 30, this.centerY + this.groundY + this.enemyY + 42);
-        this.context.lineTo(this.centerX + this.groundX + this.enemyX + 30, this.centerY + this.groundY + this.enemyY + 42);
-        this.context.stroke();
-
-        this.context.strokeStyle = '#75DD34';
-        this.context.lineWidth = 4;
-        this.context.lineCap = "round";
-        this.context.beginPath();
-        this.context.moveTo(this.centerX + this.groundX + this.enemyX - 30, this.centerY + this.groundY + this.enemyY + 42);
-        this.context.lineTo(this.centerX + this.groundX + this.enemyX - 30 + this.enemyHP * 60 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 42);
-        if (this.enemyHP > 0) this.context.stroke();
-        
-        // 自分と敵の位置の差を計算
-        this.dx = this.centerX - (this.centerX + this.groundX + this.enemyX);
-        this.dy = this.centerY - (this.centerY + this.groundY + this.enemyY);
-
-        // 差を正規化して移動量を計算
-        this.distance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
-        this.ax = (this.dx / this.distance) * this.enemySpeed;
-        this.ay = (this.dy / this.distance) * this.enemySpeed;
-        this.vx = 0;
-        this.vy = 0;
-        this.vx += this.ax;
-        this.vy += this.ay;
-        this.vx *= 0.9;
-        this.vy *= 0.9;
-        this.enemyX += this.vx;
-        this.enemyY += this.vy;
-
-        if (this.isEnemyDamaged) {
-            this.enemyHP -= this.playerDamage;
-            this.enemyX -= 2*this.vx;
-            this.enemyY -= 2*this.vy;
-            this.context.fillStyle = "rgba(255, 255, 255, 0.6)";
+        if (this.enemyHP > 0) {
+            // 敵を描画
+            this.context.fillStyle = '#FF0000';
             this.context.beginPath();
             this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius, 0, Math.PI * 2);
             this.context.closePath();
             this.context.fill();
+
+            this.context.fillStyle = '#FF6347';
+            this.context.beginPath();
+            this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - this.border, 0, Math.PI * 2);
+            this.context.closePath();
+            this.context.fill();
+
+            // this.context.fillStyle = '#222222';
+            // this.context.font = '20px Roboto medium';
+            // this.context.textAlign = "center";
+            // this.context.textBaseline = 'middle';
+            // this.context.fillText('敵', this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+
+            this.context.strokeStyle = '#222222';
+            this.context.lineWidth = 5.5;
+            this.context.lineCap = "round";
+            this.context.beginPath();
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 30, this.centerY + this.groundY + this.enemyY + 42);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX + 30, this.centerY + this.groundY + this.enemyY + 42);
+            this.context.stroke();
+
+            this.context.strokeStyle = '#75DD34';
+            this.context.lineWidth = 4;
+            this.context.lineCap = "round";
+            this.context.beginPath();
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 30, this.centerY + this.groundY + this.enemyY + 42);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX - 30 + this.enemyHP * 60 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 42);
+            if (this.enemyHP > 0) this.context.stroke();
+
+            // 自分と敵の位置の差を計算
+            this.dx = this.centerX - (this.centerX + this.groundX + this.enemyX);
+            this.dy = this.centerY - (this.centerY + this.groundY + this.enemyY);
+
+            // 差を正規化して移動量を計算
+            this.distance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+            this.ax = (this.dx / this.distance) * this.enemySpeed;
+            this.ay = (this.dy / this.distance) * this.enemySpeed;
+            this.vx = 0;
+            this.vy = 0;
+            this.vx += this.ax;
+            this.vy += this.ay;
+            this.vx *= 0.9;
+            this.vy *= 0.9;
+            this.enemyX += this.vx;
+            this.enemyY += this.vy;
+
+            if (this.isEnemyDamaged) {
+                this.enemyHP -= this.playerDamage;
+                this.enemyX -= 2 * this.vx;
+                this.enemyY -= 2 * this.vy;
+                this.context.fillStyle = "rgba(255, 255, 255, 0.6)";
+                this.context.beginPath();
+                this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius, 0, Math.PI * 2);
+                this.context.closePath();
+                this.context.fill();
+            }
+        } else {
+            this.enemyX = undefined;
+            this.enemyY = undefined;
         }
 
         // 数値を描画
         this.context.fillStyle = '#000000';
-        this.context.font = '18px Roboto medium';
+        this.context.font = '15px Roboto medium';
         this.context.textAlign = "left";
         this.context.textBaseline = 'middle';
         this.context.fillText(`${text1}`, 20, 30);
@@ -353,7 +373,7 @@ class Game {
         this.context.fillText(`${text4}`, 20, 120);
 
         const collision = this.checkCollision(
-            this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius-3,// 3は「許容範囲」
+            this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
             this.centerX, this.centerY, this.circleRadius,
         );
         if (collision) {
@@ -375,10 +395,10 @@ class Game {
     }
 
     gameOver() {
-        // なにか
+        text1 = "died";
     }
 }
 
-// インスタンス
+
 const game = new Game();
 game.start();
