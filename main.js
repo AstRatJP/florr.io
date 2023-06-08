@@ -220,7 +220,6 @@ class Game {
             this.context.fillStyle = "#FFFFFF";
             this.context.fill();
             this.context.closePath();
-            console.log("a");
             if (this.checkCollision(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3, this.x, this.y, this.basicRadius)) {
                 this.isEnemyDamaged = true;
                 this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
