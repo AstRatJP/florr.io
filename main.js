@@ -2,7 +2,7 @@ let text0 = "";
 let text1 = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
-let text4 = "";
+let text4 = "ver1.1";
 let mode = 2;
 
 let rotateAngle = 0;
