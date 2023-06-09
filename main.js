@@ -57,10 +57,9 @@ class Game {
 
         this.circleCount = circleCount;
         this.radius = radius;
+        this.rotationSpeed = 0.05;
 
         this.border = 4;
-        this.rotationSpeed = 0.03;
-        this.rotation = 0;
         this.expandSpeed = 3;
         this.gridSize = 60;
         this.gridColor = '#000000';
@@ -68,7 +67,6 @@ class Game {
         this.groundSpeedY = 0;
         this.vX = 0;
         this.vY = 0;
-        this.groundSpeedBoost = 1;
         this.groundSize = 2000;
         this.groundX = 0;
         this.groundY = 0;
@@ -256,8 +254,8 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + Math.cos(rotateAngle2) * this.radius;
-                this.y = this.centerY + Math.sin(rotateAngle2) * this.radius;
+                this.x = this.centerX + (3 * this.groundSpeedX) + Math.cos(rotateAngle2) * this.radius;
+                this.y = this.centerY + (3 * this.groundSpeedY) + Math.sin(rotateAngle2) * this.radius;
 
                 this.context.beginPath();
                 this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
@@ -284,7 +282,7 @@ class Game {
 
             }
 
-            rotateAngle += 0.035;
+            rotateAngle += this.rotationSpeed;
 
             slower++;
 
@@ -499,15 +497,22 @@ class Game {
         this.context.font = 'bold 40px Roboto medium';
         this.context.strokeText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
 
-        this.context.fillStyle = '#EEEEEE';
+        const boxWidth = 360;
+        const boxHeight = 55;
+        const boxBorder = 10
+        this.context.fillStyle = '#1DD129';
+        this.context.fillRect(this.centerX-boxWidth/2, this.centerY-boxHeight/2 + -deathScreenY + 80, boxWidth, boxHeight);
+        this.context.strokeStyle = '#18A824';
+        this.context.lineWidth = boxBorder;
+        this.context.beginPath();
+        this.context.roundRect(this.centerX-boxWidth/2, this.centerY-boxHeight/2 + -deathScreenY + 80, boxWidth, boxHeight, boxBorder*1.1);
+        this.context.stroke();
+
+        this.context.fillStyle = '#222222';
         this.context.font = 'bold 20px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
         this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
-        this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 0.2;
-        this.context.font = 'bold 20px Roboto medium';
-        this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
 
 
 
