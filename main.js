@@ -30,7 +30,6 @@ function updateTimeRatio() {
     time = new Date().getTime();
 }
 
-
 let rotateAngle = 0;
 let bounceArg = 0;
 let slower = 0;
