@@ -10,8 +10,10 @@ let text4 = "ver 1.2.2";
 let deathScreenY = undefined;
 let deathScreenBaseY = undefined;
 
-let touchX = 0;
-let touchY = 0;
+let mouseX = undefined;
+let mouseY = undefined;
+let touchX = undefined;
+let touchY = undefined;
 
 let time = 0;
 let timeRatio = 1;
@@ -70,8 +72,8 @@ class Game {
         this.groundSize = 2000;
         this.groundX = 0;
         this.groundY = 0;
-        this.enemyX = -600;
-        this.enemyY = -400;
+        this.enemyX = -800;
+        this.enemyY = -600;
         this.enemySpeed = 6;
         this.enemyRadius = 60;
         this.enemyDamage = 24;
@@ -86,6 +88,7 @@ class Game {
         this.keys = {};
         this.isLeftClick = false;
         this.isRightClick = false;
+        this.isClick = false;
 
         this.mobileAngle = 0;
 
@@ -117,6 +120,12 @@ class Game {
             event.preventDefault();
         });
 
+        this.canvas.addEventListener("click", (event) => {
+            this.isClick = true;
+            mouseX = event.clientX*devicePixelRatio;
+            mouseY = event.clientY*devicePixelRatio;
+          });
+
         this.canvas.addEventListener('mousedown', (event) => {
             if (event.button === 0) {
                 this.isLeftClick = true;
@@ -133,12 +142,17 @@ class Game {
             }
         });
 
-        this.canvas.addEventListener('touchstart', (event) => {
+        this.canvas.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX*devicePixelRatio;
+            mouseY = event.clientY*devicePixelRatio;
+        });
+
+        this.canvas.addEventListener('touchstart', () => {
             mode = 'mobile';
             this.isLeftClick = true;
         });
 
-        this.canvas.addEventListener('touchend', (event) => {
+        this.canvas.addEventListener('touchend', () => {
             this.isLeftClick = false;
         });
 
@@ -508,31 +522,48 @@ class Game {
         this.context.font = 'bold 32px Ubuntu, sans-serif';
         this.context.fillText(`${text1}`, this.centerX, this.centerY + deathScreenY - deathTextY+40);
 
-        const boxWidth = 400;
+        // 緑のボタン
+        const boxWidth = 186;
         const boxHeight = 54;
         const boxBorder = 8
-        const boxY = 126;
+        const boxY = 128;
+
         this.context.fillStyle = '#1DD129';
-        this.context.fillRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight);
+        this.context.fillRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY, boxWidth, boxHeight);
         this.context.strokeStyle = '#18A824';
         this.context.lineWidth = boxBorder;
         this.context.beginPath();
-        this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight, boxBorder * 1.1);
+        this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY, boxWidth, boxHeight, boxBorder * 1.1);
         this.context.stroke();
         
-        
         this.context.strokeStyle = '#222222';
-        this.context.font = '24px Ubuntu, sans-serif';
-        this.context.lineWidth = textBorder;
+        this.context.font = '32px Ubuntu, sans-serif';
+        this.context.lineWidth = textBorder*1.5;
         this.context.lineJoin = 'round';
         this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + boxY);
         this.context.fillStyle = '#EEEEEE';
-        this.context.font = '24px Ubuntu, sans-serif';
+        this.context.font = '32px Ubuntu, sans-serif';
         this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + boxY);
 
-
-
-
+        if (
+            mouseX >= this.centerX - boxWidth / 2 && 
+            mouseX <= this.centerX - boxWidth / 2 + boxWidth && 
+            mouseY >= this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1 && 
+            mouseY <= this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1 + boxHeight
+            ) {
+                this.context.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                this.context.lineWidth = boxBorder;
+                this.context.beginPath();
+                this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight, boxBorder * 1.1);
+                this.context.stroke();
+                if (this.isClick) {
+                    location.reload();
+                }
+            }
+            if (this.isClick) {
+                this.isClick = false;
+            }
+        
 
         requestAnimationFrame(() => this.draw());
         updateTimeRatio();
@@ -548,7 +579,7 @@ class Game {
     gameOver() {
         text0 = "You were destroyed by:";
         text1 = "Poison"
-        textConte = "reload the game to respawn";
+        textConte = "Continue";
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;
         }
