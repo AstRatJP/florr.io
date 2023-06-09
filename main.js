@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
-let text4 = "ver1.2.1";
+let text4 = "ver 1.2.2";
 
 let deathScreenY = undefined;
 let deathScreenBaseY = undefined;
@@ -102,7 +102,7 @@ class Game {
             this.centerX = this.canvas.width / 2;
             this.centerY = this.canvas.height / 2;
 
-            deathScreenBaseY = this.canvas.height/(-2);
+            deathScreenBaseY = this.canvas.height / (-2);
         }
 
         window.addEventListener('keydown', (event) => {
@@ -461,7 +461,7 @@ class Game {
 
         // 数値を描画
         this.context.fillStyle = '#000000';
-        this.context.font = 'bold 22px Roboto medium';
+        this.context.font = '22px Ubuntu, sans-serif';
         this.context.textAlign = "left";
         this.context.textBaseline = 'top';
         this.context.fillText(`${text2}`, 30, 30);
@@ -478,41 +478,48 @@ class Game {
         // this.context.fillText(`DPR: ${window.devicePixelRatio}`, 30, 320);
 
         this.context.fillStyle = '#EEEEEE';
-        this.context.font = 'bold 25px Roboto medium';
+        this.context.font = '30px Ubuntu, sans-serif';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
         this.context.fillText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
         this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 0.25;
-        this.context.font = 'bold 25px Roboto medium';
+        this.context.lineWidth = 2;
+        this.context.font = '30px Ubuntu, sans-serif';
         this.context.strokeText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
 
         this.context.fillStyle = '#EEEEEE';
-        this.context.font = 'bold 40px Roboto medium';
+        this.context.font = '45px Ubuntu, sans-serif';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
         this.context.fillText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
         this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 0.4;
-        this.context.font = 'bold 40px Roboto medium';
+        this.context.lineWidth = 3;
+        this.context.font = '45px Ubuntu, sans-serif';
         this.context.strokeText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
 
-        const boxWidth = 360;
+        const boxWidth = 400;
         const boxHeight = 55;
         const boxBorder = 10
         this.context.fillStyle = '#1DD129';
-        this.context.fillRect(this.centerX-boxWidth/2, this.centerY-boxHeight/2 + -deathScreenY + 80, boxWidth, boxHeight);
+        this.context.fillRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + 80 + 1, boxWidth, boxHeight);
         this.context.strokeStyle = '#18A824';
         this.context.lineWidth = boxBorder;
         this.context.beginPath();
-        this.context.roundRect(this.centerX-boxWidth/2, this.centerY-boxHeight/2 + -deathScreenY + 80, boxWidth, boxHeight, boxBorder*1.1);
+        this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + 80 + 1, boxWidth, boxHeight, boxBorder * 1.1);
         this.context.stroke();
 
-        this.context.fillStyle = '#222222';
-        this.context.font = 'bold 20px Roboto medium';
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = '25px Ubuntu, sans-serif';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
         this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
+
+        this.context.strokeStyle = '#222222';
+        this.context.font = '25px Ubuntu, sans-serif';
+        this.context.textAlign = "center";
+        this.context.textBaseline = 'middle';
+        this.context.lineWidth = 1.7;
+        this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
 
 
 
@@ -533,9 +540,9 @@ class Game {
         text1 = "Enemy"
         textConte = "reload the game to respawn";
         if (deathScreenY == undefined) {
-            deathScreenY = deathScreenBaseY;   
+            deathScreenY = deathScreenBaseY;
         }
-        deathScreenY -= (deathScreenY)/10;
+        deathScreenY -= (deathScreenY) / 10;
     }
 }
 
