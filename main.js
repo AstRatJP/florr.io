@@ -2,7 +2,7 @@ let text0 = "";
 let text1 = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
-let text4 = "ver1.1";
+let text4 = "ver1.1.2";
 let mode = 2;
 
 let rotateAngle = 0;
@@ -449,7 +449,7 @@ class Game {
         this.context.textBaseline = 'top';
         this.context.fillText(`${text2}`, 30, 30);
         this.context.fillText(`${text3}`, 30, 60);
-        this.context.fillText(`${text4}`, 30, 120);
+        this.context.fillText(`${text4}`, 30, 90);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 25px Roboto medium';
