@@ -2,6 +2,7 @@ let mode = 'pc';
 
 let text0 = "";
 let text1 = "";
+let textConte = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
 let text4 = "ver1.2.1";
@@ -375,40 +376,6 @@ class Game {
 
         }
 
-        // 白い球を描画
-        // const whiteCircleRadius = 5;
-        // const angleIncrement = (Math.PI * 2) / this.numWhiteCircles;
-
-        // for (let i = 0; i < this.numWhiteCircles; i++) {
-        //   const angle = this.rotation + i * angleIncrement;
-        //   const x = this.centerX + Math.cos(angle) * (this.circleRadius + this.rotationRadius);
-        //   const y = this.centerY + Math.sin(angle) * (this.circleRadius + this.rotationRadius);
-
-        //     if (checkCollision(this.groundX + this.enemyX, this.groundY + this.enemyY, 30, x, y, whiteCircleRadius)) {
-        //         this.isEnemyDamaged = true;
-        //         this.context.fillStyle = "rgba(255, 255, 255, 0.4)";
-        //         this.context.beginPath();
-        //         this.context.arc(x, y, whiteCircleRadius, 0, Math.PI * 2);
-        //         this.context.closePath();
-        //         this.context.fill();
-        //         this.enemyHP -= this.lightDamage;
-        //         this.console.log("敵と白い球が衝突しました");
-        //         continue;
-        //     }
-
-        //     this.context.fillStyle = '#CFCFCF';
-        //     this.context.beginPath();
-        //     this.context.arc(x, y, whiteCircleRadius, 0, Math.PI * 2);
-        //     this.context.closePath();
-        //     this.context.fill();
-
-        //     this.context.fillStyle = 'white';
-        //     this.context.beginPath();
-        //     this.context.arc(x, y, whiteCircleRadius - this.border, 0, Math.PI * 2);
-        //     this.context.closePath();
-        //     this.context.fill();
-        // }
-
         if (this.enemyHP > 0) {
             // 敵を描画
             this.context.fillStyle = '#FF0000';
@@ -492,6 +459,8 @@ class Game {
 
 
 
+
+
         // 数値を描画
         this.context.fillStyle = '#000000';
         this.context.font = 'bold 22px Roboto medium';
@@ -514,36 +483,35 @@ class Game {
         this.context.font = 'bold 25px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text0}`, this.centerX, deathScreenY - 120);
+        this.context.fillText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
         this.context.strokeStyle = '#222222';
         this.context.lineWidth = 0.25;
         this.context.font = 'bold 25px Roboto medium';
-        this.context.strokeText(`${text0}`, this.centerX, deathScreenY - 120);
+        this.context.strokeText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 40px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text1}`, this.centerX, deathScreenY - 80);
+        this.context.fillText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
         this.context.strokeStyle = '#222222';
         this.context.lineWidth = 0.4;
         this.context.font = 'bold 40px Roboto medium';
-        this.context.strokeText(`${text1}`, this.centerX, deathScreenY - 80);
+        this.context.strokeText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
 
-        // const collision = this.checkCollision(
-        //     this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
-        //     this.centerX, this.centerY, this.circleRadius,
-        // );
-        // if (collision) {
-        //     this.isPlayerDamaged = true;
-        //     this.isEnemyDamaged = true;
-        //     this.enemyHP -= this.playerDamage;
-        //     this.enemyX -= 1 * this.vx;
-        //     this.enemyY -= 1 * this.vy;
-        // } else {
-        //     this.isPlayerDamaged = false;
-        //     this.isEnemyDamaged = false;
-        // }
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = 'bold 20px Roboto medium';
+        this.context.textAlign = "center";
+        this.context.textBaseline = 'middle';
+        this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
+        this.context.strokeStyle = '#222222';
+        this.context.lineWidth = 0.2;
+        this.context.font = 'bold 20px Roboto medium';
+        this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
+
+
+
+
 
         requestAnimationFrame(() => this.draw());
     }
@@ -558,10 +526,11 @@ class Game {
     gameOver() {
         text0 = "You were destroyed by:";
         text1 = "Enemy"
+        textConte = "reload the game to respawn";
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;   
         }
-        deathScreenY += (this.centerY - deathScreenY)/20;
+        deathScreenY -= (deathScreenY)/10;
     }
 }
 
