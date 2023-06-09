@@ -38,7 +38,7 @@ let nowRadius = 100;
 
 function updateRadius(target, goal) {
     target += bounceArg;
-    const newBounce = (goal - target) * 0.09 + (bounceArg * 0.69);
+    const newBounce = (goal - target) * 0.09*timeRatio + (bounceArg * (1-0.31*timeRatio));
     return {
         radius: target,
         bounce: newBounce
@@ -161,20 +161,20 @@ class Game {
         if (this.playerHP > 0) {
             // Update player position based on key inputs
             if (this.keys['a'] || this.keys['ArrowLeft']) {
-                this.groundSpeedX += 0.6;
-                this.vX += 0.25;
+                this.groundSpeedX += 0.6*timeRatio;
+                this.vX += 0.25*timeRatio;
             }
             if (this.keys['d'] || this.keys['ArrowRight']) {
-                this.groundSpeedX -= 0.6;
-                this.vX -= 0.25;
+                this.groundSpeedX -= 0.6*timeRatio;
+                this.vX -= 0.25*timeRatio;
             }
             if (this.keys['s'] || this.keys['ArrowDown']) {
-                this.groundSpeedY -= 0.6;
-                this.vY -= 0.25;
+                this.groundSpeedY -= 0.6*timeRatio;
+                this.vY -= 0.25*timeRatio;
             }
             if (this.keys['w'] || this.keys['ArrowUp']) {
-                this.groundSpeedY += 0.6;
-                this.vY += 0.25;
+                this.groundSpeedY += 0.6*timeRatio;
+                this.vY += 0.25*timeRatio;
             }
         }
 
@@ -191,6 +191,11 @@ class Game {
 
 
         // 摩擦
+        // this.groundSpeedX *= 1-0.1*timeRatio;
+        // this.groundSpeedY *= 1-0.1*timeRatio;
+        // this.vX *= 1-0.1*timeRatio;
+        // this.vY *= 1-0.1*timeRatio;
+
         this.groundSpeedX *= 0.9;
         this.groundSpeedY *= 0.9;
         this.vX *= 0.9;
@@ -240,7 +245,7 @@ class Game {
             this.context.stroke();
 
             this.context.strokeStyle = '#75DD34';
-            this.context.lineWidth = 7;
+            this.context.lineWidth = 8;
             this.context.lineCap = "round";
             this.context.beginPath();
             this.context.moveTo(this.centerX - 40, this.centerY + 56);
@@ -254,8 +259,8 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + (3 * this.groundSpeedX) + Math.cos(rotateAngle2) * this.radius;
-                this.y = this.centerY + (3 * this.groundSpeedY) + Math.sin(rotateAngle2) * this.radius;
+                this.x = this.centerX + (3 * this.groundSpeedX/timeRatio) + Math.cos(rotateAngle2) * this.radius;
+                this.y = this.centerY + (3 * this.groundSpeedY/timeRatio) + Math.sin(rotateAngle2) * this.radius;
 
                 this.context.beginPath();
                 this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
@@ -275,16 +280,15 @@ class Game {
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.closePath();
                     this.context.fill();
-                    this.enemyHP -= this.basicDamage;
+                    this.enemyHP -= this.basicDamage*timeRatio;
                     console.log("敵と白い球が衝突しました");
                 }
 
 
             }
 
-            rotateAngle += this.rotationSpeed;
+            rotateAngle += this.rotationSpeed * timeRatio;
 
-            slower++;
 
             if (this.isLeftClick) {
                 nowRadius = 155;
@@ -295,13 +299,9 @@ class Game {
                     nowRadius = 80;
                 }
             }
-
-
-            if (slower % 1 == 0) {
                 const updatedValues = updateRadius(this.radius, nowRadius);
                 this.radius = updatedValues.radius;
                 bounceArg = updatedValues.bounce;
-            }
 
             // flowerを描画
             this.context.fillStyle = '#CFBB50';
@@ -397,7 +397,7 @@ class Game {
             this.context.stroke();
 
             this.context.strokeStyle = '#75DD34';
-            this.context.lineWidth = 7;
+            this.context.lineWidth = 8;
             this.context.lineCap = "round";
             this.context.beginPath();
             this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 84);
@@ -426,8 +426,8 @@ class Game {
                 this.vy += this.ay;
                 this.vx *= 0.9;
                 this.vy *= 0.9;
-                this.enemyX += this.vx;
-                this.enemyY += this.vy;
+                this.enemyX += this.vx * timeRatio;
+                this.enemyY += this.vy * timeRatio;
             }
             const collision = this.checkCollision(
                 this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
@@ -464,22 +464,23 @@ class Game {
         this.context.strokeStyle = '#000000';
         this.context.font = '20px Ubuntu, sans-serif';
         this.context.textAlign = "left";
-        this.context.textBaseline = 'top';
+        this.context.textBaseline = 'middle';
         this.context.lineWidth = textBorder*(20/24);
-        this.context.strokeText(`${text2}`, 30, 30);
-        this.context.strokeText(`${text3}`, 30, 60);
-        this.context.strokeText(`${text4}`, 30, 90);
+        this.context.strokeText(`${text2}`, 30, 40);
+        this.context.strokeText(`${text3}`, 30, 70);
+        this.context.strokeText(`${text4}`, 30, 100);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = '20px Ubuntu, sans-serif';
-        this.context.fillText(`${text2}`, 30, 30);
-        this.context.fillText(`${text3}`, 30, 60);
-        this.context.fillText(`${text4}`, 30, 90);
+        this.context.fillText(`${text2}`, 30, 40);
+        this.context.fillText(`${text3}`, 30, 70);
+        this.context.fillText(`${text4}`, 30, 100);
 
         // this.context.fillText(`${mode}`, 30, 120);
 
         // this.context.fillText(`mobileAngle: ${this.mobileAngle}`, 30, 200);
-        // this.context.fillText(`${}`, 30, 230);
+        this.context.fillStyle = '#222222';
+        this.context.fillText(`${Math.round(timeRatio * 1000) / 1000}`, 30, this.canvas.height-40);
 
         // this.context.fillText(`${}`, 30, 260);
         // this.context.fillText(`${}`, 30, 290);
@@ -534,6 +535,7 @@ class Game {
 
 
         requestAnimationFrame(() => this.draw());
+        updateTimeRatio();
     }
 
     checkCollision(x1, y1, r1, x2, y2, r2) {
@@ -550,7 +552,7 @@ class Game {
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;
         }
-        deathScreenY -= (deathScreenY) / 10;
+        deathScreenY -= (deathScreenY) / (10/timeRatio);
     }
 }
 
