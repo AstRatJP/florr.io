@@ -1,9 +1,31 @@
+let mode = 'pc';
+
 let text0 = "";
 let text1 = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
-let text4 = "ver1.1.2";
-let mode = 2;
+let text4 = "ver1.2.0";
+
+let touchX = 0;
+let touchY = 0;
+
+let time = 0;
+let timeRatio = 1;
+
+function updateTimeRatio() {
+    const lastTime = time;
+    if (lastTime > 0) {
+        // 1フレーム当たりの時間(ミリ秒)
+        const FPS_60_SEC = 1000 / 60;
+        // 差分時間をセット
+        const dTime = new Date().getTime() - lastTime;
+        // FPS60との比較係数をセット
+        timeRatio = dTime / FPS_60_SEC;
+    }
+    // 現在時間をセット
+    time = new Date().getTime();
+}
+
 
 let rotateAngle = 0;
 let bounceArg = 0;
@@ -33,7 +55,7 @@ class Game {
         this.radius = radius;
 
         this.border = 4;
-        this.rotationSpeed = 0.02;
+        this.rotationSpeed = 0.03;
         this.rotation = 0;
         this.expandSpeed = 3;
         this.gridSize = 60;
@@ -52,7 +74,7 @@ class Game {
         this.enemyRadius = 60;
         this.enemyDamage = 24;
         this.playerMaxHP = 100;
-        this.enemyMaxHP = 5000;
+        this.enemyMaxHP = 4000;
         this.playerHP = this.playerMaxHP;
         this.enemyHP = this.enemyMaxHP;
         this.playerDamage = 4;
@@ -62,6 +84,8 @@ class Game {
         this.keys = {};
         this.isLeftClick = false;
         this.isRightClick = false;
+
+        this.mobileAngle = 0;
 
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
@@ -105,6 +129,26 @@ class Game {
             }
         });
 
+        this.canvas.addEventListener('touchstart', (event) => {
+            mode = 'mobile';
+            this.isLeftClick = true;
+        });
+
+        this.canvas.addEventListener('touchend', (event) => {
+            this.isLeftClick = false;
+        });
+
+        this.canvas.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            touchX = touch.clientX * window.devicePixelRatio;
+            touchY = touch.clientY * window.devicePixelRatio;
+
+            this.mobileAngle = Math.atan2(touchY - this.centerY, touchX - this.centerX);
+        });
+
+
+
+
         this.draw = this.draw.bind(this);
         requestAnimationFrame(this.draw);
     }
@@ -114,19 +158,19 @@ class Game {
             // Update player position based on key inputs
             if (this.keys['a'] || this.keys['ArrowLeft']) {
                 this.groundSpeedX += 0.6;
-                this.vX += 0.1;
+                this.vX += 0.25;
             }
             if (this.keys['d'] || this.keys['ArrowRight']) {
                 this.groundSpeedX -= 0.6;
-                this.vX -= 0.1;
+                this.vX -= 0.25;
             }
             if (this.keys['s'] || this.keys['ArrowDown']) {
                 this.groundSpeedY -= 0.6;
-                this.vY -= 0.1;
+                this.vY -= 0.25;
             }
             if (this.keys['w'] || this.keys['ArrowUp']) {
                 this.groundSpeedY += 0.6;
-                this.vY += 0.1;
+                this.vY += 0.25;
             }
         }
 
@@ -182,78 +226,78 @@ class Game {
 
 
         if (this.playerHP > 0) {
-        // flower hpバー
-        this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 10;
-        this.context.lineCap = "round";
-        this.context.beginPath();
-        this.context.moveTo(this.centerX - 40, this.centerY + 56);
-        this.context.lineTo(this.centerX + 40, this.centerY + 56);
-        this.context.stroke();
-
-        this.context.strokeStyle = '#75DD34';
-        this.context.lineWidth = 7;
-        this.context.lineCap = "round";
-        this.context.beginPath();
-        this.context.moveTo(this.centerX - 40, this.centerY + 56);
-        this.context.lineTo(this.centerX - 40 + this.playerHP * 80 / this.playerMaxHP, this.centerY + 56);
-        if (this.playerHP > 0) this.context.stroke();
-
-        if (this.playerHP < 100) {
-            this.playerHP += 0.005;
-        }
-
-        // basic
-        for (var i = 0; i < this.circleCount; i++) {
-            var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-            this.x = this.centerX + Math.cos(rotateAngle2) * this.radius;
-            this.y = this.centerY + Math.sin(rotateAngle2) * this.radius;
-
+            // flower hpバー
+            this.context.strokeStyle = '#222222';
+            this.context.lineWidth = 10;
+            this.context.lineCap = "round";
             this.context.beginPath();
-            this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
-            this.context.fillStyle = "#CFCFCF";
-            this.context.fill();
-            this.context.closePath();
+            this.context.moveTo(this.centerX - 40, this.centerY + 56);
+            this.context.lineTo(this.centerX + 40, this.centerY + 56);
+            this.context.stroke();
 
+            this.context.strokeStyle = '#75DD34';
+            this.context.lineWidth = 7;
+            this.context.lineCap = "round";
             this.context.beginPath();
-            this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
-            this.context.fillStyle = "#FFFFFF";
-            this.context.fill();
-            this.context.closePath();
-            if (this.checkCollision(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3, this.x, this.y, this.basicRadius)) {
-                this.isEnemyDamaged = true;
-                this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
+            this.context.moveTo(this.centerX - 40, this.centerY + 56);
+            this.context.lineTo(this.centerX - 40 + this.playerHP * 80 / this.playerMaxHP, this.centerY + 56);
+            if (this.playerHP > 0) this.context.stroke();
+
+            if (this.playerHP < 100) {
+                this.playerHP += 0.005;
+            }
+
+            // basic
+            for (var i = 0; i < this.circleCount; i++) {
+                var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
+                this.x = this.centerX + Math.cos(rotateAngle2) * this.radius;
+                this.y = this.centerY + Math.sin(rotateAngle2) * this.radius;
+
                 this.context.beginPath();
                 this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
-                this.context.closePath();
+                this.context.fillStyle = "#CFCFCF";
                 this.context.fill();
-                this.enemyHP -= this.basicDamage;
-                console.log("敵と白い球が衝突しました");
+                this.context.closePath();
+
+                this.context.beginPath();
+                this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
+                this.context.fillStyle = "#FFFFFF";
+                this.context.fill();
+                this.context.closePath();
+                if (this.checkCollision(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3, this.x, this.y, this.basicRadius)) {
+                    this.isEnemyDamaged = true;
+                    this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
+                    this.context.beginPath();
+                    this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
+                    this.context.closePath();
+                    this.context.fill();
+                    this.enemyHP -= this.basicDamage;
+                    console.log("敵と白い球が衝突しました");
+                }
+
+
             }
 
+            rotateAngle += 0.035;
 
-        }
+            slower++;
 
-        rotateAngle += 0.03;
-
-        slower++;
-
-        if (this.isLeftClick) {
-            nowRadius = 155;
-        } else {
-            if (this.isRightClick) {
-                nowRadius = 50;
+            if (this.isLeftClick) {
+                nowRadius = 155;
             } else {
-                nowRadius = 80;
+                if (this.isRightClick) {
+                    nowRadius = 50;
+                } else {
+                    nowRadius = 80;
+                }
             }
-        }
 
 
-        if (slower % 2 == 0) {
-            const updatedValues = updateRadius(this.radius, nowRadius);
-            this.radius = updatedValues.radius;
-            bounceArg = updatedValues.bounce;
-        }
+            if (slower % 1 == 0) {
+                const updatedValues = updateRadius(this.radius, nowRadius);
+                this.radius = updatedValues.radius;
+                bounceArg = updatedValues.bounce;
+            }
 
             // flowerを描画
             this.context.fillStyle = '#CFBB50';
@@ -442,34 +486,45 @@ class Game {
             this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
+
+
         // 数値を描画
         this.context.fillStyle = '#000000';
-        this.context.font = '22px Roboto medium';
+        this.context.font = 'bold 22px Roboto medium';
         this.context.textAlign = "left";
         this.context.textBaseline = 'top';
         this.context.fillText(`${text2}`, 30, 30);
         this.context.fillText(`${text3}`, 30, 60);
         this.context.fillText(`${text4}`, 30, 90);
+        // this.context.fillText(`${mode}`, 30, 120);
+
+        // this.context.fillText(`mobileAngle: ${this.mobileAngle}`, 30, 200);
+        // this.context.fillText(`${}`, 30, 230);
+
+        // this.context.fillText(`${}`, 30, 260);
+        // this.context.fillText(`${}`, 30, 290);
+
+        // this.context.fillText(`DPR: ${window.devicePixelRatio}`, 30, 320);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 25px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text0}`, this.centerX, this.centerY-120);
+        this.context.fillText(`${text0}`, this.centerX, this.centerY - 120);
         this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 0.6;
+        this.context.lineWidth = 0.25;
         this.context.font = 'bold 25px Roboto medium';
-        this.context.strokeText(`${text0}`, this.centerX, this.centerY-120);
+        this.context.strokeText(`${text0}`, this.centerX, this.centerY - 120);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 40px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text1}`, this.centerX, this.centerY-80);
+        this.context.fillText(`${text1}`, this.centerX, this.centerY - 80);
         this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 1;
+        this.context.lineWidth = 0.4;
         this.context.font = 'bold 40px Roboto medium';
-        this.context.strokeText(`${text1}`, this.centerX, this.centerY-80);
+        this.context.strokeText(`${text1}`, this.centerX, this.centerY - 80);
 
         // const collision = this.checkCollision(
         //     this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
@@ -504,4 +559,3 @@ class Game {
 
 
 const game = new Game(5, 0);
-// game.start();
