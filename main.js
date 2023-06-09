@@ -460,13 +460,22 @@ class Game {
 
 
         // 数値を描画
-        this.context.fillStyle = '#000000';
-        this.context.font = '22px Ubuntu, sans-serif';
+        const textBorder = 3;
+        this.context.strokeStyle = '#000000';
+        this.context.font = '20px Ubuntu, sans-serif';
         this.context.textAlign = "left";
         this.context.textBaseline = 'top';
+        this.context.lineWidth = textBorder*(20/24);
+        this.context.strokeText(`${text2}`, 30, 30);
+        this.context.strokeText(`${text3}`, 30, 60);
+        this.context.strokeText(`${text4}`, 30, 90);
+
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = '20px Ubuntu, sans-serif';
         this.context.fillText(`${text2}`, 30, 30);
         this.context.fillText(`${text3}`, 30, 60);
         this.context.fillText(`${text4}`, 30, 90);
+
         // this.context.fillText(`${mode}`, 30, 120);
 
         // this.context.fillText(`mobileAngle: ${this.mobileAngle}`, 30, 200);
@@ -477,49 +486,48 @@ class Game {
 
         // this.context.fillText(`DPR: ${window.devicePixelRatio}`, 30, 320);
 
-        this.context.fillStyle = '#EEEEEE';
-        this.context.font = '30px Ubuntu, sans-serif';
+        const deathTextY = 160;
+        this.context.strokeStyle = '#222222';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
-        this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 2;
-        this.context.font = '30px Ubuntu, sans-serif';
-        this.context.strokeText(`${text0}`, this.centerX, this.centerY + deathScreenY - 120);
+        this.context.lineWidth = textBorder;
+        this.context.font = '24px Ubuntu, sans-serif';
+        this.context.lineJoin = 'round';
+        this.context.strokeText(`${text0}`, this.centerX, this.centerY + deathScreenY - deathTextY);
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = '24px Ubuntu, sans-serif';
+        this.context.fillText(`${text0}`, this.centerX, this.centerY + deathScreenY - deathTextY);
 
-        this.context.fillStyle = '#EEEEEE';
-        this.context.font = '45px Ubuntu, sans-serif';
-        this.context.textAlign = "center";
-        this.context.textBaseline = 'middle';
-        this.context.fillText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
         this.context.strokeStyle = '#222222';
-        this.context.lineWidth = 3;
-        this.context.font = '45px Ubuntu, sans-serif';
-        this.context.strokeText(`${text1}`, this.centerX, this.centerY + deathScreenY - 80);
+        this.context.lineWidth = textBorder*1.5;
+        this.context.font = 'bold 32px Ubuntu, sans-serif';
+        this.context.lineJoin = 'round';
+        this.context.strokeText(`${text1}`, this.centerX, this.centerY + deathScreenY - deathTextY+40);
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = 'bold 32px Ubuntu, sans-serif';
+        this.context.fillText(`${text1}`, this.centerX, this.centerY + deathScreenY - deathTextY+40);
 
         const boxWidth = 400;
-        const boxHeight = 55;
-        const boxBorder = 10
+        const boxHeight = 54;
+        const boxBorder = 8
+        const boxY = 126;
         this.context.fillStyle = '#1DD129';
-        this.context.fillRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + 80 + 1, boxWidth, boxHeight);
+        this.context.fillRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight);
         this.context.strokeStyle = '#18A824';
         this.context.lineWidth = boxBorder;
         this.context.beginPath();
-        this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + 80 + 1, boxWidth, boxHeight, boxBorder * 1.1);
+        this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight, boxBorder * 1.1);
         this.context.stroke();
-
-        this.context.fillStyle = '#EEEEEE';
-        this.context.font = '25px Ubuntu, sans-serif';
-        this.context.textAlign = "center";
-        this.context.textBaseline = 'middle';
-        this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
-
+        
+        
         this.context.strokeStyle = '#222222';
-        this.context.font = '25px Ubuntu, sans-serif';
-        this.context.textAlign = "center";
-        this.context.textBaseline = 'middle';
-        this.context.lineWidth = 1.7;
-        this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + 80);
+        this.context.font = '24px Ubuntu, sans-serif';
+        this.context.lineWidth = textBorder;
+        this.context.lineJoin = 'round';
+        this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + boxY);
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = '24px Ubuntu, sans-serif';
+        this.context.fillText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + boxY);
 
 
 
@@ -537,7 +545,7 @@ class Game {
 
     gameOver() {
         text0 = "You were destroyed by:";
-        text1 = "Enemy"
+        text1 = "Poison"
         textConte = "reload the game to respawn";
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;
