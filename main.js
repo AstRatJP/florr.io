@@ -4,7 +4,10 @@ let text0 = "";
 let text1 = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
 let text3 = "made by AstRatJP";
-let text4 = "ver1.2.0";
+let text4 = "ver1.2.1";
+
+let deathScreenY = undefined;
+let deathScreenBaseY = undefined;
 
 let touchX = 0;
 let touchY = 0;
@@ -99,6 +102,8 @@ class Game {
 
             this.centerX = this.canvas.width / 2;
             this.centerY = this.canvas.height / 2;
+
+            deathScreenBaseY = this.canvas.height/(-2);
         }
 
         window.addEventListener('keydown', (event) => {
@@ -458,22 +463,20 @@ class Game {
                 this.vy *= 0.9;
                 this.enemyX += this.vx;
                 this.enemyY += this.vy;
-
-                const collision = this.checkCollision(
-                    this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
-                    this.centerX, this.centerY, this.circleRadius,
-                );
-                if (collision) {
-                    this.isPlayerDamaged = true;
-                    this.isEnemyDamaged = true;
-                    this.enemyHP -= this.playerDamage;
-                    this.enemyX -= 1 * this.vx;
-                    this.enemyY -= 1 * this.vy;
-                } else {
-                    this.isPlayerDamaged = false;
-                    this.isEnemyDamaged = false;
-                }
-
+            }
+            const collision = this.checkCollision(
+                this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
+                this.centerX, this.centerY, this.circleRadius,
+            );
+            if (collision) {
+                this.isPlayerDamaged = true;
+                this.isEnemyDamaged = true;
+                this.enemyHP -= this.playerDamage;
+                this.enemyX -= 1 * this.vx;
+                this.enemyY -= 1 * this.vy;
+            } else {
+                this.isPlayerDamaged = false;
+                this.isEnemyDamaged = false;
             }
 
         } else {
@@ -485,6 +488,7 @@ class Game {
             this.context.fillStyle = "rgba(0, 0, 0, 0.3)";
             this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         }
+
 
 
 
@@ -510,21 +514,21 @@ class Game {
         this.context.font = 'bold 25px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text0}`, this.centerX, this.centerY - 120);
+        this.context.fillText(`${text0}`, this.centerX, deathScreenY - 120);
         this.context.strokeStyle = '#222222';
         this.context.lineWidth = 0.25;
         this.context.font = 'bold 25px Roboto medium';
-        this.context.strokeText(`${text0}`, this.centerX, this.centerY - 120);
+        this.context.strokeText(`${text0}`, this.centerX, deathScreenY - 120);
 
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 40px Roboto medium';
         this.context.textAlign = "center";
         this.context.textBaseline = 'middle';
-        this.context.fillText(`${text1}`, this.centerX, this.centerY - 80);
+        this.context.fillText(`${text1}`, this.centerX, deathScreenY - 80);
         this.context.strokeStyle = '#222222';
         this.context.lineWidth = 0.4;
         this.context.font = 'bold 40px Roboto medium';
-        this.context.strokeText(`${text1}`, this.centerX, this.centerY - 80);
+        this.context.strokeText(`${text1}`, this.centerX, deathScreenY - 80);
 
         // const collision = this.checkCollision(
         //     this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
@@ -554,6 +558,10 @@ class Game {
     gameOver() {
         text0 = "You were destroyed by:";
         text1 = "Enemy"
+        if (deathScreenY == undefined) {
+            deathScreenY = deathScreenBaseY;   
+        }
+        deathScreenY += (this.centerY - deathScreenY)/20;
     }
 }
 
