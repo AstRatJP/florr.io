@@ -474,7 +474,7 @@ class Game {
 
 
         // 数値を描画
-        const textBorder = 3;
+        const textBorder = 4;
         this.context.strokeStyle = '#000000';
         this.context.font = '20px Ubuntu, sans-serif';
         this.context.textAlign = "left";
@@ -494,7 +494,7 @@ class Game {
 
         // this.context.fillText(`mobileAngle: ${this.mobileAngle}`, 30, 200);
         this.context.fillStyle = '#222222';
-        this.context.fillText(`${Math.round(timeRatio * 1000) / 1000}`, 30, this.canvas.height-40);
+        // this.context.fillText(`${Math.round(timeRatio * 1000) / 1000}`, 30, this.canvas.height-40);
 
         // this.context.fillText(`${}`, 30, 260);
         // this.context.fillText(`${}`, 30, 290);
@@ -538,7 +538,7 @@ class Game {
         
         this.context.strokeStyle = '#222222';
         this.context.font = '32px Ubuntu, sans-serif';
-        this.context.lineWidth = textBorder*1.5;
+        this.context.lineWidth = textBorder*(32/24);
         this.context.lineJoin = 'round';
         this.context.strokeText(`${textConte}`, this.centerX, this.centerY + -deathScreenY + boxY);
         this.context.fillStyle = '#EEEEEE';
@@ -551,7 +551,7 @@ class Game {
             mouseY >= this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1 && 
             mouseY <= this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1 + boxHeight
             ) {
-                this.context.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                this.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
                 this.context.lineWidth = boxBorder;
                 this.context.beginPath();
                 this.context.roundRect(this.centerX - boxWidth / 2, this.centerY - boxHeight / 2 + -deathScreenY + boxY + 1, boxWidth, boxHeight, boxBorder * 1.1);
@@ -578,7 +578,7 @@ class Game {
 
     gameOver() {
         text0 = "You were destroyed by:";
-        text1 = "Poison"
+        text1 = "Enemy"
         textConte = "Continue";
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;
