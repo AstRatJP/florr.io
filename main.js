@@ -89,6 +89,8 @@ class Game {
         this.isLeftClick = false;
         this.isRightClick = false;
         this.isClick = false;
+        this.isSpace = false;
+        this.isShift = false;
 
         this.mobileAngle = 0;
 
@@ -190,6 +192,17 @@ class Game {
                 this.groundSpeedY += 0.6*timeRatio;
                 this.vY += 0.25*timeRatio;
             }
+        }
+
+        if (this.keys['Space']) {
+            this.isSpace = true;
+        } else {
+            this.isSpace = false;
+        }
+        if (this.keys['ShiftLeft'] || this.keys['ShiftRight']) {
+            this.isShift = true;
+        } else {
+            this.isShift = false;
         }
 
 
@@ -304,10 +317,10 @@ class Game {
             rotateAngle += this.rotationSpeed * timeRatio;
 
 
-            if (this.isLeftClick) {
+            if (this.isLeftClick||this.isSpace) {
                 nowRadius = 155;
             } else {
-                if (this.isRightClick) {
+                if (this.isRightClick||this.isShift) {
                     nowRadius = 50;
                 } else {
                     nowRadius = 80;
@@ -363,10 +376,10 @@ class Game {
             this.context.lineWidth = 1.5;
             this.context.lineCap = "round";
             this.context.beginPath();
-            if (this.isLeftClick) {
+            if (this.isLeftClick||this.isSpace) {
                 this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.58, this.circleRadius * 0.3, this.circleRadius * 0.3, Math.PI, Math.PI * 0.2, Math.PI * 0.8);
             } else {
-                if (this.isRightClick) {
+                if (this.isRightClick||this.isShift) {
                     this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.46, this.circleRadius * 0.3, this.circleRadius * 0.12, Math.PI, Math.PI * 0.2, Math.PI * 0.8);
                 } else {
                     this.context.ellipse(this.centerX, this.centerY + this.circleRadius * 0.21, this.circleRadius * 0.3, this.circleRadius * 0.25, 0, Math.PI * 0.2, Math.PI * 0.8);
