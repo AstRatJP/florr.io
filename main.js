@@ -18,6 +18,8 @@ let mouseY = undefined;
 let touchX = undefined;
 let touchY = undefined;
 
+const textBorder = 4;
+
 let time = 0;
 let timeRatio = 1;
 
@@ -445,11 +447,38 @@ class Game {
         if (this.enemyHP > 0) {
             // 敵を描画
 
+            // hp
+            this.context.strokeStyle = '#222222';
+            this.context.lineWidth = 10;
+            this.context.lineCap = "round";
+            this.context.beginPath();
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX + 60, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.stroke();
+
+            this.context.strokeStyle = '#75DD34';
+            this.context.lineWidth = 8;
+            this.context.lineCap = "round";
+            this.context.beginPath();
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX - 60 + this.enemyHP * 120 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.stroke();
+
+            this.context.strokeStyle = '#222222';
+            this.context.font = 'bold 16px Ubuntu, sans-serif';
+            this.context.lineWidth = textBorder * (16 / 24);
+            this.context.lineJoin = 'round';
+            this.context.strokeText("Spider", this.centerX + this.groundX + this.enemyX - 62, this.centerY + this.groundY + this.enemyY + 80);
+            this.context.fillStyle = '#EEEEEE';
+            this.context.font = 'bold 16px Ubuntu, sans-serif';
+            this.context.fillText("Spider", this.centerX + this.groundX + this.enemyX - 62, this.centerY + this.groundY + this.enemyY + 80);
+
+
             // 足
             this.context.strokeStyle = '#333333';
             this.context.lineWidth = 18;
             this.context.lineCap = "round";
-            this.legLength = 135;
+            this.legLength = 134;
             this.legMargin = 18;
             this.legSpeed = 0.00000000000001 * this.nowSpeed;
             this.legMove = 0.2;
@@ -496,22 +525,6 @@ class Game {
             this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 16, 0, Math.PI * 2);
             this.context.closePath();
             this.context.fill();
-
-            this.context.strokeStyle = '#222222';
-            this.context.lineWidth = 14;
-            this.context.lineCap = "round";
-            this.context.beginPath();
-            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
-            this.context.lineTo(this.centerX + this.groundX + this.enemyX + 60, this.centerY + this.groundY + this.enemyY + 90);
-            this.context.stroke();
-
-            this.context.strokeStyle = '#75DD34';
-            this.context.lineWidth = 11;
-            this.context.lineCap = "round";
-            this.context.beginPath();
-            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
-            this.context.lineTo(this.centerX + this.groundX + this.enemyX - 60 + this.enemyHP * 120 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 90);
-            this.context.stroke();
 
             if (this.isEnemyDamaged) {
                 this.isEnemyAggressive = true;
@@ -578,7 +591,6 @@ class Game {
 
 
         // 数値を描画
-        const textBorder = 4;
         this.context.strokeStyle = '#000000';
         this.context.font = 'bold 20px Ubuntu, sans-serif';
         this.context.textAlign = "left";
