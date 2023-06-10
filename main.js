@@ -5,13 +5,15 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.6";
+let text4 = "ver 1.5.3";
 
 let historyX = [];
 let historyY = [];
 
 
-let basic = Array(5).fill(0);
+let basicHealth = Array(5).fill(-1);
+let basicRadius = Array(5).fill(0);
+let basicBounce = Array(5).fill(0);
 const basicReload = 60;
 
 let deathScreenY = undefined;
@@ -43,13 +45,12 @@ function updateTimeRatio() {
 
 
 let rotateAngle = 0;
-let bounceArg = 0;
 let slower = 0;
 let nowRadius = 100;
 
-function updateRadius(target, goal) {
-    target += bounceArg;
-    const newBounce = (goal - target) * 0.09 * timeRatio + (bounceArg * (1 - 0.40 * timeRatio));
+function updateRadius(target, goal, bounce) {
+    target += bounce;
+    const newBounce = (goal - target) * 0.09 * timeRatio + (bounce * (1 - 0.40 * timeRatio));
     return {
         radius: target,
         bounce: newBounce
@@ -334,10 +335,10 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + ((this.groundX - historyX[7])/timeRatio) + Math.cos(rotateAngle2) * this.radius;
-                this.y = this.centerY + ((this.groundY - historyY[7])/timeRatio) + Math.sin(rotateAngle2) * this.radius;
+                this.x = this.centerX + ((this.groundX - historyX[7])/timeRatio) + Math.cos(rotateAngle2) * basicRadius[i];
+                this.y = this.centerY + ((this.groundY - historyY[7])/timeRatio) + Math.sin(rotateAngle2) * basicRadius[i];
 
-                if (basic[i] < 0) {
+                if (basicHealth[i] < 0) {
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.fillStyle = "#CFCFCF";
@@ -357,11 +358,13 @@ class Game {
                         this.context.closePath();
                         this.context.fill();
                         this.enemyHP -= this.basicDamage * timeRatio;
-                        basic[i] = basicReload;
+                        basicHealth[i] = basicReload;
                     }
+                } else {
+                    basicRadius[i] = 0;
                 }
-                if (basic[i] == basicReload) {
-                    basic[i] -= 1*timeRatio;
+                if (basicHealth[i] == basicReload) {
+                    basicHealth[i] -= 1*timeRatio;
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.fillStyle = "#CFCFCF";
@@ -382,10 +385,14 @@ class Game {
                     this.context.fill();
                 }
 
+                const updatedValues = updateRadius(basicRadius[i], nowRadius, basicBounce[i]);
+
+                basicRadius[i] = updatedValues.radius;
+                basicBounce[i] = updatedValues.bounce;
 
             }
-            basic = basic.map((value) => value - 1*timeRatio);
-            console.log(basic);
+            basicHealth = basicHealth.map((value) => value - 1*timeRatio);
+            console.log(basicHealth);
 
 
             rotateAngle += this.rotationSpeed * timeRatio;
@@ -400,9 +407,6 @@ class Game {
                     nowRadius = 80;
                 }
             }
-            const updatedValues = updateRadius(this.radius, nowRadius);
-            this.radius = updatedValues.radius;
-            bounceArg = updatedValues.bounce;
 
             // flowerを描画
             this.context.fillStyle = '#CFBB50';
