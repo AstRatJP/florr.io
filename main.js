@@ -5,10 +5,14 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Allow Basic to take damages, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.5";
+let text4 = "ver 1.6";
 
 let historyX = [];
 let historyY = [];
+
+
+let basic = Array(5).fill(0);
+const basicReload = 60;
 
 let deathScreenY = undefined;
 let deathScreenBaseY = undefined;
@@ -89,7 +93,7 @@ class Game {
         this.enemyAngleY = 0;
         this.enemyRadius = 62;
         this.enemyDamage = 24;
-        this.enemyMaxHP = 4000;
+        this.enemyMaxHP = 100;
         this.enemySpeed = 0.8;
         this.nowSpeed = 0;
         this.isEnemyAggressive = false;
@@ -333,29 +337,56 @@ class Game {
                 this.x = this.centerX + ((this.groundX - historyX[7])/timeRatio) + Math.cos(rotateAngle2) * this.radius;
                 this.y = this.centerY + ((this.groundY - historyY[7])/timeRatio) + Math.sin(rotateAngle2) * this.radius;
 
-                this.context.beginPath();
-                this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
-                this.context.fillStyle = "#CFCFCF";
-                this.context.fill();
-                this.context.closePath();
+                if (basic[i] < 0) {
+                    this.context.beginPath();
+                    this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
+                    this.context.fillStyle = "#CFCFCF";
+                    this.context.fill();
+                    this.context.closePath();
+    
+                    this.context.beginPath();
+                    this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
+                    this.context.fillStyle = "#FFFFFF";
+                    this.context.fill();
+                    this.context.closePath();
+                    if (this.checkCollision(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3, this.x, this.y, this.basicRadius)) {
+                        this.isEnemyDamaged = true;
+                        this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
+                        this.context.beginPath();
+                        this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
+                        this.context.closePath();
+                        this.context.fill();
+                        this.enemyHP -= this.basicDamage * timeRatio;
+                        basic[i] = basicReload;
+                    }
+                }
+                if (basic[i] == basicReload) {
+                    basic[i] -= 1*timeRatio;
+                    this.context.beginPath();
+                    this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
+                    this.context.fillStyle = "#CFCFCF";
+                    this.context.fill();
+                    this.context.closePath();
+    
+                    this.context.beginPath();
+                    this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
+                    this.context.fillStyle = "#FFFFFF";
+                    this.context.fill();
+                    this.context.closePath();
 
-                this.context.beginPath();
-                this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
-                this.context.fillStyle = "#FFFFFF";
-                this.context.fill();
-                this.context.closePath();
-                if (this.checkCollision(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3, this.x, this.y, this.basicRadius)) {
                     this.isEnemyDamaged = true;
                     this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.closePath();
                     this.context.fill();
-                    this.enemyHP -= this.basicDamage * timeRatio;
                 }
 
 
             }
+            basic = basic.map((value) => value - 1*timeRatio);
+            console.log(basic);
+
 
             rotateAngle += this.rotationSpeed * timeRatio;
 
