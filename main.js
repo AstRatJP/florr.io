@@ -544,6 +544,8 @@ class Game {
                 this.enemyX += this.vx * timeRatio;
                 this.enemyY += this.vy * timeRatio;
                 this.enemyAngle = Math.atan2(this.vy, this.vx);
+            } else {
+                this.enemyAngle += 0.001*timeRatio;
             }
             const collision = this.checkCollision(
                 this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
@@ -592,7 +594,7 @@ class Game {
         this.context.fillText(`${text3}`, 30, 70);
         this.context.fillText(`${text4}`, 30, 100);
 
-        // this.context.fillText(`${mode}`, 30, 120);
+        // this.context.fillText(`sorry for make spider passive mob`, 30, 130);
 
         // this.context.fillText(`mobileAngle: ${this.mobileAngle}`, 30, 200);
         // this.context.fillStyle = '#222222';
