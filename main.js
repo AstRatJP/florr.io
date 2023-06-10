@@ -224,10 +224,10 @@ class Game {
             }
 
             if (mode == 'mobile') {
-                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.5;
-                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.5;
-                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.5;
-                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.5;
+                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.3;
+                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.3;
+                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.3;
+                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.3;
             }
         }
 
