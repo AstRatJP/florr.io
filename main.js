@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.5.6";
+let text4 = "ver 1.5.7";
 
 let historyX = [];
 let historyY = [];
@@ -176,7 +176,6 @@ class Game {
             touchX = touch.clientX * window.devicePixelRatio;
             touchY = touch.clientY * window.devicePixelRatio;
             mode = 'mobile';
-            this.basicDamage = 6;
             this.mobileAngle = Math.atan2(touchY - this.centerY, touchX - this.centerX);
             this.isLeftClick = true;
         });
@@ -366,7 +365,7 @@ class Game {
                         this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                         this.context.closePath();
                         this.context.fill();
-                        this.enemyHP -= this.basicDamage * timeRatio;
+                        this.enemyHP -= this.basicDamage;
                         basicHealth[i] = basicReload;
                     }
                 } else {
