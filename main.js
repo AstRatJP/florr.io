@@ -94,7 +94,7 @@ class Game {
         this.enemyAngleY = 0;
         this.enemyRadius = 62;
         this.enemyDamage = 24;
-        this.enemyMaxHP = 100;
+        this.enemyMaxHP = 150;
         this.enemySpeed = 0.8;
         this.nowSpeed = 0;
         this.isEnemyAggressive = false;
@@ -217,6 +217,10 @@ class Game {
             if (this.keys['w'] || this.keys['ArrowUp']) {
                 this.groundSpeedY += this.flowerSpeed;
                 this.vY += 0.25;
+            }
+
+            if (this.keys['r']) {
+                basicHealth = basicHealth.map(() => 60)
             }
 
             if (mode == 'mobile') {
@@ -362,27 +366,6 @@ class Game {
                     }
                 } else {
                     basicRadius[i] = 0;
-                }
-                if (basicHealth[i] == basicReload) {
-                    basicHealth[i] -= 1*timeRatio;
-                    this.context.beginPath();
-                    this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
-                    this.context.fillStyle = "#CFCFCF";
-                    this.context.fill();
-                    this.context.closePath();
-    
-                    this.context.beginPath();
-                    this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
-                    this.context.fillStyle = "#FFFFFF";
-                    this.context.fill();
-                    this.context.closePath();
-
-                    this.isEnemyDamaged = true;
-                    this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
-                    this.context.beginPath();
-                    this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
-                    this.context.closePath();
-                    this.context.fill();
                 }
 
                 const updatedValues = updateRadius(basicRadius[i], nowRadius, basicBounce[i]);
