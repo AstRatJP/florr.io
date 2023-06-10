@@ -3,9 +3,9 @@ let mode = 'pc';
 let text0 = "";
 let text1 = "";
 let textConte = "";
-let text2 = "To Do: Fix collisions, Allow Basic to take damages.";
+let text2 = "To Do: Fix collisions, Allow Basic to take damages, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.4";
+let text4 = "ver 1.5";
 
 let historyX = [];
 let historyY = [];
@@ -71,7 +71,7 @@ class Game {
         this.groundSpeedX = 0;
         this.groundSpeedY = 0;
 
-        this.playerMaxHP = 100;
+        this.playerMaxHP = 100000;
         this.flowerSpeed = 0.6;
 
         this.vX = 0;
@@ -80,12 +80,17 @@ class Game {
         this.groundX = 0;
         this.groundY = 0;
 
-        this.enemyX = -820;
-        this.enemyY = -600;
-        this.enemyRadius = 60;
+        this.enemyX = this.RandomSpawnPosition(900, 250);
+        this.enemyY = this.RandomSpawnPosition(600, 250);
+        this.enemyAngle = 0;
+        this.enemyAngleX = 1;
+        this.enemyAngleY = 0;
+        this.enemyRadius = 62;
         this.enemyDamage = 24;
-        this.enemyMaxHP = 4000;
-        this.enemySpeed = 1.6;
+        this.enemyMaxHP = 4000000;
+        this.enemySpeed = 0.8;
+        this.nowSpeed = 0;
+        this.isEnemyAggressive = false;
 
         this.vx = 0;
         this.vy = 0;
@@ -323,8 +328,8 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + ((this.groundX - historyX[2])) + Math.cos(rotateAngle2) * this.radius;
-                this.y = this.centerY + ((this.groundY - historyY[2])) + Math.sin(rotateAngle2) * this.radius;
+                this.x = this.centerX + ((this.groundX - historyX[3])) + Math.cos(rotateAngle2) * this.radius;
+                this.y = this.centerY + ((this.groundY - historyY[3])) + Math.sin(rotateAngle2) * this.radius;
 
                 this.context.beginPath();
                 this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
@@ -345,7 +350,6 @@ class Game {
                     this.context.closePath();
                     this.context.fill();
                     this.enemyHP -= this.basicDamage * timeRatio;
-                    console.log("敵と白い球が衝突しました");
                 }
 
 
@@ -427,7 +431,6 @@ class Game {
             if (this.isPlayerDamaged) {
                 this.playerHP -= this.enemyDamage;
                 this.groundSpeedX -= 7 * (this.dx / this.distance) * timeRatio;
-                console.log(this.dx, this.dy, this.distance);
                 this.groundSpeedY -= 7 * (this.dy / this.distance) * timeRatio;
                 this.context.fillStyle = "rgba(255, 0, 0, 0.4)";
                 this.context.beginPath();
@@ -441,42 +444,88 @@ class Game {
 
         if (this.enemyHP > 0) {
             // 敵を描画
-            this.context.fillStyle = '#FF0000';
+
+            // 足
+            this.context.strokeStyle = '#333333';
+            this.context.lineWidth = 18;
+            this.context.lineCap = "round";
+            this.legLength = 135;
+            this.legMargin = 18;
+            this.legSpeed = 0.00000000000001 * this.nowSpeed;
+            this.legMove = 0.2;
+            this.isounozure = Math.PI * 0.5;
+
+            this.context.beginPath();
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 1 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 + this.legMargin * 1.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 1 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 + this.legMargin * 1.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 2 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 + this.legMargin * 0.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 2 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 + this.legMargin * 0.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 3 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 - this.legMargin * 0.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 3 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 - this.legMargin * 0.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 4 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 - this.legMargin * 1.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 4 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * ((50 - this.legMargin * 1.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 1 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 + this.legMargin * 1.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 1 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 + this.legMargin * 1.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 2 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 + this.legMargin * 0.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 2 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 + this.legMargin * 0.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 3 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 - this.legMargin * 0.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 3 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 - this.legMargin * 0.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY);
+            this.context.lineTo(Math.cos(this.legMove * Math.sin(this.isounozure * 4 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 - this.legMargin * 1.5) / 100)) * this.legLength + this.centerX + this.groundX + this.enemyX, Math.sin(this.legMove * Math.sin(this.isounozure * 4 + Math.PI * (new Date().getTime() * this.legSpeed)) + this.enemyAngle + Math.PI * (-(50 - this.legMargin * 1.5) / 100)) * this.legLength + this.centerY + this.groundY + this.enemyY);
+
+            this.context.stroke();
+
+            // 体
+            this.context.fillStyle = '#403525';
             this.context.beginPath();
             this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius, 0, Math.PI * 2);
             this.context.closePath();
             this.context.fill();
 
-            this.context.fillStyle = '#FF6347';
+            this.context.fillStyle = '#4F412E';
             this.context.beginPath();
-            this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - this.border, 0, Math.PI * 2);
+            this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 16, 0, Math.PI * 2);
             this.context.closePath();
             this.context.fill();
 
             this.context.strokeStyle = '#222222';
-            this.context.lineWidth = 10;
+            this.context.lineWidth = 14;
             this.context.lineCap = "round";
             this.context.beginPath();
-            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 84);
-            this.context.lineTo(this.centerX + this.groundX + this.enemyX + 60, this.centerY + this.groundY + this.enemyY + 84);
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX + 60, this.centerY + this.groundY + this.enemyY + 90);
             this.context.stroke();
 
             this.context.strokeStyle = '#75DD34';
-            this.context.lineWidth = 8;
+            this.context.lineWidth = 11;
             this.context.lineCap = "round";
             this.context.beginPath();
-            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 84);
-            this.context.lineTo(this.centerX + this.groundX + this.enemyX - 60 + this.enemyHP * 120 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 84);
+            this.context.moveTo(this.centerX + this.groundX + this.enemyX - 60, this.centerY + this.groundY + this.enemyY + 90);
+            this.context.lineTo(this.centerX + this.groundX + this.enemyX - 60 + this.enemyHP * 120 / this.enemyMaxHP, this.centerY + this.groundY + this.enemyY + 90);
             this.context.stroke();
 
             if (this.isEnemyDamaged) {
-                this.context.fillStyle = "rgba(255, 255, 255, 0.4)";
+                this.isEnemyAggressive = true;
+                this.context.fillStyle = "rgba(255, 0, 0, 0.3)";
                 this.context.beginPath();
                 this.context.arc(this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius, 0, Math.PI * 2);
                 this.context.closePath();
                 this.context.fill();
             }
-            if (this.playerHP > 0) {
+
+            this.preEnemyX = this.enemyX;
+            this.preEnemyY = this.enemyY;
+
+            if (this.playerHP > 0 && this.isEnemyAggressive) {
                 // 自分と敵の位置の差を計算
                 this.dx = this.centerX - (this.centerX + this.groundX + this.enemyX);
                 this.dy = this.centerY - (this.centerY + this.groundY + this.enemyY);
@@ -487,10 +536,14 @@ class Game {
                 this.ay = (this.dy / this.distance) * this.enemySpeed;
                 this.vx += this.ax;
                 this.vy += this.ay;
-                this.vx *= 0.8;
-                this.vy *= 0.8;
+                this.vx *= 0.89;
+                this.vy *= 0.89;
+                this.realVX = this.enemyX;
+                this.realVY = this.enemyY;
+                this.nowSpeed = Math.sqrt(this.realVX * this.realVX + this.realVY * this.realVY);
                 this.enemyX += this.vx * timeRatio;
                 this.enemyY += this.vy * timeRatio;
+                this.enemyAngle = Math.atan2(this.vy, this.vx);
             }
             const collision = this.checkCollision(
                 this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
@@ -625,9 +678,17 @@ class Game {
         return distance <= r1 + r2;
     }
 
+    RandomSpawnPosition(goal, notThis) {
+        let randomNumber = 0;
+        do {
+            randomNumber = Math.floor(Math.random() * goal * 2) - goal;
+        } while (randomNumber >= -notThis && randomNumber <= notThis);
+        return randomNumber;
+    }
+
     gameOver() {
         text0 = "You were destroyed by:";
-        text1 = "Enemy"
+        text1 = "Spider"
         textConte = "Continue";
         if (deathScreenY == undefined) {
             deathScreenY = deathScreenBaseY;
