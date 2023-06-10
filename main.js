@@ -3,7 +3,7 @@ let mode = 'pc';
 let text0 = "";
 let text1 = "";
 let textConte = "";
-let text2 = "To Do: Fix collisions, Allow Basic to take damages, Fix spider legs movement";
+let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
 let text4 = "ver 1.5.3";
 
