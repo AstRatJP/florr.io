@@ -71,7 +71,7 @@ class Game {
         this.groundSpeedX = 0;
         this.groundSpeedY = 0;
 
-        this.playerMaxHP = 100000;
+        this.playerMaxHP = 100;
         this.flowerSpeed = 0.6;
 
         this.vX = 0;
@@ -87,7 +87,7 @@ class Game {
         this.enemyAngleY = 0;
         this.enemyRadius = 62;
         this.enemyDamage = 24;
-        this.enemyMaxHP = 4000000;
+        this.enemyMaxHP = 4000;
         this.enemySpeed = 0.8;
         this.nowSpeed = 0;
         this.isEnemyAggressive = false;
