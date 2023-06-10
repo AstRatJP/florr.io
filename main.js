@@ -176,6 +176,7 @@ class Game {
             touchX = touch.clientX * window.devicePixelRatio;
             touchY = touch.clientY * window.devicePixelRatio;
             mode = 'mobile';
+            this.basicDamage = 6;
             this.mobileAngle = Math.atan2(touchY - this.centerY, touchX - this.centerX);
             this.isLeftClick = true;
         });
@@ -224,10 +225,10 @@ class Game {
             }
 
             if (mode == 'mobile') {
-                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.3;
-                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.3;
-                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.3;
-                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.3;
+                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.4;
+                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.4;
+                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.4;
+                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.4;
             }
         }
 
