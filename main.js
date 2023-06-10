@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.5.";
+let text4 = "ver 1.5.3";
 
 let historyX = [];
 let historyY = [];
@@ -224,10 +224,10 @@ class Game {
             }
 
             if (mode == 'mobile') {
-                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 1;
-                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 1;
-                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 1;
-                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 1;
+                this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.5;
+                this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.5;
+                this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.5;
+                this.vY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.5;
             }
         }
 
@@ -259,14 +259,18 @@ class Game {
         if (mode == 'mobile') {
             this.groundX += this.groundSpeedX * timeRatio;
             this.groundY += this.groundSpeedY * timeRatio;
+            if (this.groundX > 1000 - 30) this.groundX -= this.groundSpeedX * timeRatio;
+            if (this.groundX < -1000 + 30) this.groundX -= this.groundSpeedX * timeRatio;
+            if (this.groundY > 1000 - 30) this.groundY -= this.groundSpeedY * timeRatio;
+            if (this.groundY < -1000 + 30) this.groundY -= this.groundSpeedY * timeRatio;
         } else {
             this.groundX += this.groundSpeedX * timeRatio * (Math.abs(Math.cos(this.angle)));// 斜め移動のとき速さが√2倍になってしまうのを調整
             this.groundY += this.groundSpeedY * timeRatio * (Math.abs(Math.sin(this.angle)));
+            if (this.groundX > 1000 - 30) this.groundX -= this.groundSpeedX * timeRatio * Math.abs(Math.cos(this.angle));
+            if (this.groundX < -1000 + 30) this.groundX -= this.groundSpeedX * timeRatio * Math.abs(Math.cos(this.angle));
+            if (this.groundY > 1000 - 30) this.groundY -= this.groundSpeedY * timeRatio * Math.abs(Math.sin(this.angle));
+            if (this.groundY < -1000 + 30) this.groundY -= this.groundSpeedY * timeRatio * Math.abs(Math.sin(this.angle));
         }
-        if (this.groundX > 1000 - 30) this.groundX -= this.groundSpeedX * timeRatio * Math.abs(Math.cos(this.angle));
-        if (this.groundX < -1000 + 30) this.groundX -= this.groundSpeedX * timeRatio * Math.abs(Math.cos(this.angle));
-        if (this.groundY > 1000 - 30) this.groundY -= this.groundSpeedY * timeRatio * Math.abs(Math.sin(this.angle));
-        if (this.groundY < -1000 + 30) this.groundY -= this.groundSpeedY * timeRatio * Math.abs(Math.sin(this.angle));
 
 
 
@@ -339,8 +343,8 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + ((this.groundX - historyX[7])/timeRatio) + Math.cos(rotateAngle2) * basicRadius[i];
-                this.y = this.centerY + ((this.groundY - historyY[7])/timeRatio) + Math.sin(rotateAngle2) * basicRadius[i];
+                this.x = this.centerX + ((this.groundX - historyX[7]) / timeRatio) + Math.cos(rotateAngle2) * basicRadius[i];
+                this.y = this.centerY + ((this.groundY - historyY[7]) / timeRatio) + Math.sin(rotateAngle2) * basicRadius[i];
 
                 if (basicHealth[i] < 0) {
                     this.context.beginPath();
@@ -348,7 +352,7 @@ class Game {
                     this.context.fillStyle = "#CFCFCF";
                     this.context.fill();
                     this.context.closePath();
-    
+
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius - this.border, 0, Math.PI * 2);
                     this.context.fillStyle = "#FFFFFF";
@@ -374,7 +378,7 @@ class Game {
                 basicBounce[i] = updatedValues.bounce;
 
             }
-            basicHealth = basicHealth.map((value) => value - 1*timeRatio);
+            basicHealth = basicHealth.map((value) => value - 1 * timeRatio);
 
 
             rotateAngle += this.rotationSpeed * timeRatio;
@@ -420,7 +424,7 @@ class Game {
             this.context.fill();
 
             // まぶた
-            if (this.isLeftClick||this.isSpace) {
+            if (this.isLeftClick || this.isSpace) {
                 this.context.strokeStyle = '#FFE763';
                 this.context.lineWidth = 4;
                 this.context.beginPath();
@@ -575,7 +579,7 @@ class Game {
                 this.enemyY += this.vy * timeRatio;
                 this.enemyAngle = Math.atan2(this.vy, this.vx);
             } else {
-                this.enemyAngle += 0.001*timeRatio;
+                this.enemyAngle += 0.001 * timeRatio;
             }
             const collision = this.checkCollision(
                 this.centerX + this.groundX + this.enemyX, this.centerY + this.groundY + this.enemyY, this.enemyRadius - 3,// 3は「許容範囲」
