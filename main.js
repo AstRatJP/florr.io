@@ -231,12 +231,12 @@ class Game {
             }
         }
 
-        if (this.keys['Space']) {
+        if (this.keys[' ']) {
             this.isSpace = true;
         } else {
             this.isSpace = false;
         }
-        if (this.keys['ShiftLeft'] || this.keys['ShiftRight']) {
+        if (this.keys['Shift']) {
             this.isShift = true;
         } else {
             this.isShift = false;
@@ -375,7 +375,6 @@ class Game {
 
             }
             basicHealth = basicHealth.map((value) => value - 1*timeRatio);
-            console.log(basicHealth);
 
 
             rotateAngle += this.rotationSpeed * timeRatio;
@@ -421,7 +420,7 @@ class Game {
             this.context.fill();
 
             // まぶた
-            if (this.isLeftClick) {
+            if (this.isLeftClick||this.isSpace) {
                 this.context.strokeStyle = '#FFE763';
                 this.context.lineWidth = 4;
                 this.context.beginPath();
