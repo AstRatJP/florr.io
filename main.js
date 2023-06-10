@@ -328,8 +328,8 @@ class Game {
             // basic
             for (var i = 0; i < this.circleCount; i++) {
                 var rotateAngle2 = (Math.PI * 2 * i) / this.circleCount + rotateAngle;
-                this.x = this.centerX + ((this.groundX - historyX[3])) + Math.cos(rotateAngle2) * this.radius;
-                this.y = this.centerY + ((this.groundY - historyY[3])) + Math.sin(rotateAngle2) * this.radius;
+                this.x = this.centerX + ((this.groundX - historyX[7])/timeRatio) + Math.cos(rotateAngle2) * this.radius;
+                this.y = this.centerY + ((this.groundY - historyY[7])/timeRatio) + Math.sin(rotateAngle2) * this.radius;
 
                 this.context.beginPath();
                 this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
