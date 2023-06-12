@@ -501,7 +501,7 @@ class Game {
             this.context.lineCap = "round";
             this.legLength = 134;
             this.legMargin = 18;
-            this.legSpeed = 0.00000000000001 * this.nowSpeed;
+            this.legSpeed = 0.000000000000012 * this.nowSpeed;
             this.legMove = 0.2;
             this.isounozure = Math.PI * 0.5;
 
@@ -577,7 +577,7 @@ class Game {
                 this.nowSpeed = Math.sqrt(this.realVX * this.realVX + this.realVY * this.realVY);
                 this.enemyX += this.vx * timeRatio;
                 this.enemyY += this.vy * timeRatio;
-                this.enemyAngle += (Math.atan2(this.vy, this.vx)-this.enemyAngle)/4;
+                this.enemyAngle = Math.atan2(this.vy, this.vx);
             } else {
                 this.enemyAngle += 0.001 * timeRatio;
             }
