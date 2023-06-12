@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.6";
+let text4 = "ver 1.7";
 
 let historyX = [];
 let historyY = [];
@@ -65,7 +65,7 @@ class Game {
         this.centerY = this.canvas.height / 2;
         this.numWhiteCircles = 30;
         this.circleRadius = 33;
-        this.basicRadius = 13;
+        this.basicRadius = 14;
 
         this.circleCount = circleCount;
         this.radius = radius;
@@ -610,6 +610,54 @@ class Game {
 
 
 
+        // petal
+        for (var i = 0; i < this.circleCount; i++) {
+            this.petalBoxX = (i-this.circleCount/2+0.5)*106;
+        if (basicHealth[i] < 0) {
+        this.context.fillStyle = '#7EEF6D';
+        } else {
+        this.context.fillStyle = '#57994C';
+        }
+        this.context.fillRect(this.centerX+this.petalBoxX-50, this.canvas.height-200, 84, 84);
+        this.context.strokeStyle = '#66C258';
+        this.context.lineWidth = 8;
+        this.context.beginPath();
+        this.context.roundRect(this.centerX+this.petalBoxX-50, this.canvas.height-200, 84, 84, 2);
+        this.context.stroke();
+
+        this.context.beginPath();
+        this.context.arc(this.centerX+this.petalBoxX-8, this.canvas.height-164, this.basicRadius*1.1, 0, Math.PI * 2);
+        this.context.fillStyle = "#CFCFCF";
+        this.context.fill();
+        this.context.closePath();
+
+        this.context.beginPath();
+        this.context.arc(this.centerX+this.petalBoxX-8, this.canvas.height-164, this.basicRadius*1.1 - this.border, 0, Math.PI * 2);
+        this.context.fillStyle = "#FFFFFF";
+        this.context.fill();
+        this.context.closePath();
+
+        this.context.strokeStyle = '#222222';
+        this.context.font = 'bold 18px Ubuntu, sans-serif';
+        this.context.textAlign = "center";
+        this.context.textBaseline = 'middle';
+        this.context.lineWidth = textBorder * (18 / 24);
+        this.context.lineJoin = 'round';
+        this.context.strokeText("Basic", this.centerX+this.petalBoxX-8, this.canvas.height-136);
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = 'bold 18px Ubuntu, sans-serif';
+        this.context.fillText("Basic", this.centerX+this.petalBoxX-8, this.canvas.height-136);
+        }
+        this.context.strokeStyle = '#222222';
+        this.context.font = 'bold 19px Ubuntu, sans-serif';
+        this.context.textAlign = "center";
+        this.context.textBaseline = 'middle';
+        this.context.lineWidth = textBorder * (19 / 24);
+        this.context.lineJoin = 'round';
+        this.context.strokeText("[R]", this.centerX-240, this.canvas.height-66);
+        this.context.fillStyle = '#EEEEEE';
+        this.context.font = 'bold 19px Ubuntu, sans-serif';
+        this.context.fillText("[R]", this.centerX-240, this.canvas.height-66);
 
         // 数値を描画
         this.context.strokeStyle = '#000000';
@@ -715,6 +763,7 @@ class Game {
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 14px Ubuntu, sans-serif';
         this.context.fillText("click here to reload the page↓", this.canvas.width-130, 10);
+
 
         this.context.strokeStyle = '#222222';
         this.context.font = 'bold 32px Ubuntu, sans-serif';
