@@ -5,16 +5,16 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.6.1";
+let text4 = "ver 1.6.2";
 
 let historyX = [];
 let historyY = [];
 
 
-let basicHealth = Array(5).fill(-1);
+const basicReload = 60;
+let basicHealth = Array(5).fill(basicReload);
 let basicRadius = Array(5).fill(0);
 let basicBounce = Array(5).fill(0);
-const basicReload = 60;
 
 let deathScreenY = undefined;
 let deathScreenBaseY = undefined;
@@ -87,8 +87,8 @@ class Game {
         this.groundX = 0;
         this.groundY = 0;
 
-        this.enemyX = this.RandomSpawnPosition(900, 250);
-        this.enemyY = this.RandomSpawnPosition(600, 250);
+        this.enemyX = this.RandomSpawnPosition(850, 240);
+        this.enemyY = this.RandomSpawnPosition(600, 240);
         this.enemyAngle = 0;
         this.enemyAngleX = 1;
         this.enemyAngleY = 0;
@@ -577,7 +577,7 @@ class Game {
                 this.nowSpeed = Math.sqrt(this.realVX * this.realVX + this.realVY * this.realVY);
                 this.enemyX += this.vx * timeRatio;
                 this.enemyY += this.vy * timeRatio;
-                this.enemyAngle = Math.atan2(this.vy, this.vx);
+                this.enemyAngle += (Math.atan2(this.vy, this.vx)-this.enemyAngle)/4;
             } else {
                 this.enemyAngle += 0.001 * timeRatio;
             }
@@ -756,14 +756,14 @@ class Game {
         this.context.roundRect(this.canvas.width - 80, 20, 60, 60, boxBorder * 1.1);
         this.context.stroke();
 
-        this.context.strokeStyle = '#222222';
-        this.context.font = 'bold 14px Ubuntu, sans-serif';
-        this.context.lineWidth = textBorder * (10 / 24);
-        this.context.lineJoin = 'round';
-        this.context.strokeText("click here to reload the page↓", this.canvas.width - 130, 10);
-        this.context.fillStyle = '#EEEEEE';
-        this.context.font = 'bold 14px Ubuntu, sans-serif';
-        this.context.fillText("click here to reload the page↓", this.canvas.width - 130, 10);
+        // this.context.strokeStyle = '#222222';
+        // this.context.font = 'bold 14px Ubuntu, sans-serif';
+        // this.context.lineWidth = textBorder * (10 / 24);
+        // this.context.lineJoin = 'round';
+        // this.context.strokeText("click here to reload the page↓", this.canvas.width - 130, 10);
+        // this.context.fillStyle = '#EEEEEE';
+        // this.context.font = 'bold 14px Ubuntu, sans-serif';
+        // this.context.fillText("click here to reload the page↓", this.canvas.width - 130, 10);
 
 
         this.context.strokeStyle = '#222222';
