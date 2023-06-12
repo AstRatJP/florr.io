@@ -223,7 +223,7 @@ class Game {
                 basicHealth = basicHealth.map(() => 60)
             }
 
-            if (mode == 'mobile') {
+            if (mode == 'mobile'&& Math.sqrt((touchX - this.centerX)**2 + (touchY - this.centerY)**2)>20) {
                 this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.46;
                 this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.46;
                 this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.46;
