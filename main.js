@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.7";
+let text4 = "ver 1.6.1";
 
 let historyX = [];
 let historyY = [];
@@ -220,10 +220,10 @@ class Game {
             }
 
             if (this.keys['r']) {
-                basicHealth = basicHealth.map(() => 60)
+                basicHealth = basicHealth.map(() => basicReload)
             }
 
-            if (mode == 'mobile'&& Math.sqrt((touchX - this.centerX)**2 + (touchY - this.centerY)**2)>25) {
+            if (mode == 'mobile' && Math.sqrt((touchX - this.centerX) ** 2 + (touchY - this.centerY) ** 2) > 25) {
                 this.groundSpeedX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.46;
                 this.groundSpeedY -= this.flowerSpeed * Math.sin(this.mobileAngle) * timeRatio * 0.46;
                 this.vX -= this.flowerSpeed * Math.cos(this.mobileAngle) * timeRatio * 0.46;
@@ -612,41 +612,42 @@ class Game {
 
         // petal
         for (var i = 0; i < this.circleCount; i++) {
-            this.petalBoxX = (i-this.circleCount/2+0.5)*106;
-        if (basicHealth[i] < 0) {
-        this.context.fillStyle = '#7EEF6D';
-        } else {
-        this.context.fillStyle = '#57994C';
-        }
-        this.context.fillRect(this.centerX+this.petalBoxX-50, this.canvas.height-200, 84, 84);
-        this.context.strokeStyle = '#66C258';
-        this.context.lineWidth = 8;
-        this.context.beginPath();
-        this.context.roundRect(this.centerX+this.petalBoxX-50, this.canvas.height-200, 84, 84, 2);
-        this.context.stroke();
+            this.petalBoxX = (i - this.circleCount / 2 + 0.5) * 106;
+            this.context.fillStyle = '#7EEF6D';
+            this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, 84);
+            this.context.fillStyle = '#57994C';
+            if (basicHealth[i]>0) {
+                this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, basicHealth[i]*(80/basicReload)+4);   
+            }
 
-        this.context.beginPath();
-        this.context.arc(this.centerX+this.petalBoxX-8, this.canvas.height-164, this.basicRadius*1.1, 0, Math.PI * 2);
-        this.context.fillStyle = "#CFCFCF";
-        this.context.fill();
-        this.context.closePath();
+            this.context.strokeStyle = '#66C258';
+            this.context.lineWidth = 8;
+            this.context.beginPath();
+            this.context.roundRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, 84, 2);
+            this.context.stroke();
 
-        this.context.beginPath();
-        this.context.arc(this.centerX+this.petalBoxX-8, this.canvas.height-164, this.basicRadius*1.1 - this.border, 0, Math.PI * 2);
-        this.context.fillStyle = "#FFFFFF";
-        this.context.fill();
-        this.context.closePath();
+            this.context.beginPath();
+            this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 164, this.basicRadius * 1.1, 0, Math.PI * 2);
+            this.context.fillStyle = "#CFCFCF";
+            this.context.fill();
+            this.context.closePath();
 
-        this.context.strokeStyle = '#222222';
-        this.context.font = 'bold 18px Ubuntu, sans-serif';
-        this.context.textAlign = "center";
-        this.context.textBaseline = 'middle';
-        this.context.lineWidth = textBorder * (18 / 24);
-        this.context.lineJoin = 'round';
-        this.context.strokeText("Basic", this.centerX+this.petalBoxX-8, this.canvas.height-136);
-        this.context.fillStyle = '#EEEEEE';
-        this.context.font = 'bold 18px Ubuntu, sans-serif';
-        this.context.fillText("Basic", this.centerX+this.petalBoxX-8, this.canvas.height-136);
+            this.context.beginPath();
+            this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 164, this.basicRadius * 1.1 - this.border, 0, Math.PI * 2);
+            this.context.fillStyle = "#FFFFFF";
+            this.context.fill();
+            this.context.closePath();
+
+            this.context.strokeStyle = '#222222';
+            this.context.font = 'bold 18px Ubuntu, sans-serif';
+            this.context.textAlign = "center";
+            this.context.textBaseline = 'middle';
+            this.context.lineWidth = textBorder * (18 / 24);
+            this.context.lineJoin = 'round';
+            this.context.strokeText("Basic", this.centerX + this.petalBoxX - 8, this.canvas.height - 136);
+            this.context.fillStyle = '#EEEEEE';
+            this.context.font = 'bold 18px Ubuntu, sans-serif';
+            this.context.fillText("Basic", this.centerX + this.petalBoxX - 8, this.canvas.height - 136);
         }
         this.context.strokeStyle = '#222222';
         this.context.font = 'bold 19px Ubuntu, sans-serif';
@@ -654,10 +655,10 @@ class Game {
         this.context.textBaseline = 'middle';
         this.context.lineWidth = textBorder * (19 / 24);
         this.context.lineJoin = 'round';
-        this.context.strokeText("[R]", this.centerX-240, this.canvas.height-66);
+        this.context.strokeText("[R]", this.centerX - 240, this.canvas.height - 66);
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 19px Ubuntu, sans-serif';
-        this.context.fillText("[R]", this.centerX-240, this.canvas.height-66);
+        this.context.fillText("[R]", this.centerX - 240, this.canvas.height - 66);
 
         // 数値を描画
         this.context.strokeStyle = '#000000';
@@ -746,44 +747,44 @@ class Game {
             }
         }
 
-        
+
         this.context.fillStyle = '#AAAAAA';
-        this.context.fillRect(this.canvas.width-80, 20, 60, 60);
+        this.context.fillRect(this.canvas.width - 80, 20, 60, 60);
         this.context.strokeStyle = '#8A8A8A';
         this.context.lineWidth = boxBorder;
         this.context.beginPath();
-        this.context.roundRect(this.canvas.width-80, 20, 60, 60, boxBorder * 1.1);
+        this.context.roundRect(this.canvas.width - 80, 20, 60, 60, boxBorder * 1.1);
         this.context.stroke();
 
         this.context.strokeStyle = '#222222';
         this.context.font = 'bold 14px Ubuntu, sans-serif';
         this.context.lineWidth = textBorder * (10 / 24);
         this.context.lineJoin = 'round';
-        this.context.strokeText("click here to reload the page↓", this.canvas.width-130, 10);
+        this.context.strokeText("click here to reload the page↓", this.canvas.width - 130, 10);
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 14px Ubuntu, sans-serif';
-        this.context.fillText("click here to reload the page↓", this.canvas.width-130, 10);
+        this.context.fillText("click here to reload the page↓", this.canvas.width - 130, 10);
 
 
         this.context.strokeStyle = '#222222';
         this.context.font = 'bold 32px Ubuntu, sans-serif';
         this.context.lineWidth = textBorder * (32 / 24);
         this.context.lineJoin = 'round';
-        this.context.strokeText("x", this.canvas.width-50, 48);
+        this.context.strokeText("x", this.canvas.width - 50, 48);
         this.context.fillStyle = '#EEEEEE';
         this.context.font = 'bold 32px Ubuntu, sans-serif';
-        this.context.fillText("x", this.canvas.width-50, 48);
+        this.context.fillText("x", this.canvas.width - 50, 48);
 
         if (
-            mouseX >= this.canvas.width-80 &&
-            mouseX <= this.canvas.width-80 + 60 &&
+            mouseX >= this.canvas.width - 80 &&
+            mouseX <= this.canvas.width - 80 + 60 &&
             mouseY >= 20 &&
             mouseY <= 20 + 60
         ) {
             this.context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
             this.context.lineWidth = boxBorder;
             this.context.beginPath();
-            this.context.roundRect(this.canvas.width-80, 20, 60, 60, boxBorder * 1.1);
+            this.context.roundRect(this.canvas.width - 80, 20, 60, 60, boxBorder * 1.1);
             this.context.stroke();
             if (this.isClick) {
                 location.reload();
