@@ -94,7 +94,7 @@ class Game {
         this.enemyAngleY = 0;
         this.enemyRadius = 62;
         this.enemyDamage = 24;
-        this.enemyMaxHP = 150;
+        this.enemyMaxHP = 300;
         this.enemySpeed = 0.8;
         this.nowSpeed = 0;
         this.isEnemyAggressive = false;
