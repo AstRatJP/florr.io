@@ -589,8 +589,8 @@ class Game {
                 this.isPlayerDamaged = true;
                 this.isEnemyDamaged = true;
                 this.enemyHP -= this.playerDamage;
-                this.enemyX -= 0.9 * this.vx * timeRatio;
-                this.enemyY -= 0.9 * this.vy * timeRatio;
+                this.enemyX -= * this.vx * timeRatio;
+                this.enemyY -= * this.vy * timeRatio;
             } else {
                 this.isPlayerDamaged = false;
                 this.isEnemyDamaged = false;
