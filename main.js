@@ -5,7 +5,7 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.7";
+let text4 = "ver 1.7.1";
 
 let historyX = [];
 let historyY = [];
