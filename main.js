@@ -5,13 +5,13 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.6.2";
+let text4 = "ver 1.7";
 
 let historyX = [];
 let historyY = [];
 
 
-const basicReload = 60;
+const basicReload = 100;
 let basicHealth = Array(5).fill(basicReload);
 let basicRadius = Array(5).fill(0);
 let basicBounce = Array(5).fill(0);
@@ -104,7 +104,7 @@ class Game {
         this.playerHP = this.playerMaxHP;
         this.enemyHP = this.enemyMaxHP;
         this.playerDamage = 4;
-        this.basicDamage = 12;
+        this.basicDamage = 18;
         this.isPlayerDamaged = false;
         this.isEnemyDamaged = false;
         this.keys = {};
@@ -346,7 +346,7 @@ class Game {
                 this.x = this.centerX + ((this.groundX - historyX[7]) / timeRatio) + Math.cos(rotateAngle2) * basicRadius[i];
                 this.y = this.centerY + ((this.groundY - historyY[7]) / timeRatio) + Math.sin(rotateAngle2) * basicRadius[i];
 
-                if (basicHealth[i] < 0) {
+                if (basicHealth[i] < 5) {
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.fillStyle = "#CFCFCF";
@@ -609,7 +609,8 @@ class Game {
 
 
 
-// petal
+
+        // petal
         for (var i = 0; i < this.circleCount; i++) {
             this.petalBoxX = (i - this.circleCount / 2 + 0.5) * 106;
             this.context.fillStyle = '#7EEF6D';
@@ -623,13 +624,13 @@ class Game {
             this.context.fillStyle = '#57994C';
         
             if (basicHealth[i]>0) {
-                
+                this.rad = (1+Math.cos(Math.PI*(basicHealth[i]/basicReload)))/2;
                 this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 158, 100, 
-                Math.PI * -10*(1/basicReload)*basicHealth[i], 
-                Math.PI * -8*(1/basicReload)*basicHealth[i]
+                Math.PI * 8*this.rad, 
+                Math.PI * 6*this.rad
                 );
                 this.context.lineTo(this.centerX + this.petalBoxX - 8, this.canvas.height - 158);
-               
+                
                 this.context.fill();
                 this.context.closePath();
                 // this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, basicHealth[i]*(80/basicReload)+4);
