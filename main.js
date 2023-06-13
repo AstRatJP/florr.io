@@ -1,4 +1,4 @@
-let text4 = "ver 1.7.2";
+let text4 = "ver 1.7.3";
 
 let mode = 'pc';
 
@@ -347,7 +347,7 @@ class Game {
                 this.x = this.centerX + ((this.groundX - historyX[7]) / timeRatio) + Math.cos(rotateAngle2) * basicRadius[i];
                 this.y = this.centerY + ((this.groundY - historyY[7]) / timeRatio) + Math.sin(rotateAngle2) * basicRadius[i];
 
-                if (basicHealth[i] < 5) {
+                if (basicHealth[i] < 15) {
                     this.context.beginPath();
                     this.context.arc(this.x, this.y, this.basicRadius, 0, Math.PI * 2);
                     this.context.fillStyle = "#CFCFCF";
@@ -627,8 +627,8 @@ class Game {
             if (basicHealth[i]>0) {
                 this.rad = (1+Math.cos(Math.PI*(basicHealth[i]/basicReload)))/2;
                 this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 158, 100, 
-                Math.PI * 7.4*this.rad, 
-                Math.PI * 5.4*this.rad
+                Math.PI * 11.4*this.rad, 
+                Math.PI * 9.4*this.rad
                 );
                 this.context.lineTo(this.centerX + this.petalBoxX - 8, this.canvas.height - 158);
                 
