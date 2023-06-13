@@ -609,16 +609,33 @@ class Game {
 
 
 
-
-        // petal
+// petal
         for (var i = 0; i < this.circleCount; i++) {
             this.petalBoxX = (i - this.circleCount / 2 + 0.5) * 106;
             this.context.fillStyle = '#7EEF6D';
+            this.context.lineWidth = 0;
+            this.context.beginPath();
             this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, 84);
+            let squarePath = new Path2D();
+            squarePath.rect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, 84);
+            this.context.save();
+            this.context.clip(squarePath);
             this.context.fillStyle = '#57994C';
+        
             if (basicHealth[i]>0) {
-                this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, basicHealth[i]*(80/basicReload)+4);   
+                
+                this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 158, 100, 
+                Math.PI * -10*(1/basicReload)*basicHealth[i], 
+                Math.PI * -8*(1/basicReload)*basicHealth[i]
+                );
+                this.context.lineTo(this.centerX + this.petalBoxX - 8, this.canvas.height - 158);
+               
+                this.context.fill();
+                this.context.closePath();
+                // this.context.fillRect(this.centerX + this.petalBoxX - 50, this.canvas.height - 200, 84, basicHealth[i]*(80/basicReload)+4);
             }
+
+            this.context.restore();
 
             this.context.strokeStyle = '#66C258';
             this.context.lineWidth = 8;
