@@ -1,3 +1,5 @@
+let text4 = "ver 1.7.2";
+
 let mode = 'pc';
 
 let text0 = "";
@@ -5,7 +7,6 @@ let text1 = "";
 let textConte = "";
 let text2 = "To Do: Fix collisions, Fix spider legs movement";
 let text3 = "made by AstRatJP";
-let text4 = "ver 1.7.1";
 
 let historyX = [];
 let historyY = [];
@@ -626,8 +627,8 @@ class Game {
             if (basicHealth[i]>0) {
                 this.rad = (1+Math.cos(Math.PI*(basicHealth[i]/basicReload)))/2;
                 this.context.arc(this.centerX + this.petalBoxX - 8, this.canvas.height - 158, 100, 
-                Math.PI * 8*this.rad, 
-                Math.PI * 6*this.rad
+                Math.PI * 7.4*this.rad, 
+                Math.PI * 5.4*this.rad
                 );
                 this.context.lineTo(this.centerX + this.petalBoxX - 8, this.canvas.height - 158);
                 
